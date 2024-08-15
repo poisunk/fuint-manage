@@ -28,3 +28,10 @@ export function getAccountInfo() {
         method: "get"
     })
 }
+
+export function getRouters() {
+    return request({
+        url: "/backendApi/login/getRouters",
+        method: "get"
+    })
+}
