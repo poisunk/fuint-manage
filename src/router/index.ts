@@ -23,6 +23,16 @@ const routes = [
                 path: '/content/article',
                 name: '文章管理',
                 component: () => import('../views/pages/content/article.vue')
+            },
+            {
+                path: '/goods/category',
+                name: '商品分类',
+                component: () => import('../views/pages/goods/category.vue')
+            },
+            {
+                path: '/goods/list',
+                name: '商品列表',
+                component: () => import('../views/pages/goods/goods.vue')
             }
         ]
     },

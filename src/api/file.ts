@@ -1,0 +1,12 @@
+import request from "../util/request"
+
+export function uploadFile(data: any) {
+    return request({
+        url: "/clientApi/file/upload",
+        method: "post",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        },
+        data: data
+    })
+}

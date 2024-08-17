@@ -20,6 +20,23 @@ export const useMenuStore = defineStore("menu", {
                             icon: 'CircleCheck',
                         }
                     ]
+                },
+                {
+                    name: '商品管理',
+                    path: '/goods',
+                    icon: 'Edit',
+                    children: [
+                        {
+                            name: '商品分类',
+                            path: '/goods/category',
+                            icon: 'CircleCheck',
+                        },
+                        {
+                            name: '商品列表',
+                            path: '/goods/list',
+                            icon: 'CircleCheck',
+                        }
+                    ]
                 }
             ]
         }
