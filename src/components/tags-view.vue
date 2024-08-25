@@ -44,12 +44,9 @@ const closeTag = (tag: any) => {
 };
 
 const addTags = () => {
-    const { name, path } = router.currentRoute.value;
+    const { name } = router.currentRoute.value;
     if (name && name !== 'Dashboard') {
-        tagsViewStore.addView({
-            name: name,
-            path: path,
-        });
+        tagsViewStore.addView(route);
     }
 };
 

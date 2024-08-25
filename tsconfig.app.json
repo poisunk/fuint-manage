@@ -11,6 +11,7 @@
       "DOM.Iterable"
     ],
     "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
     /* Bundler mode */
     "moduleResolution": "node",
     "allowImportingTsExtensions": true,

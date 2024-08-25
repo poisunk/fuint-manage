@@ -1,6 +1,8 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import Home from '../views/home.vue'
-import { useUserStore } from '../store/user'
+import { createRouter, createWebHashHistory } from 'vue-router';
+import Home from '../views/home.vue';
+import { useUserStore } from '../store/user';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 const routes = [
     {
@@ -64,8 +66,10 @@ const router = createRouter({
     routes
 })
 
+NProgress.configure({ showSpinner: false });
 
 router.beforeEach((to, from, next) => {
+    NProgress.start();
     const userStore = useUserStore();
     if (!userStore.init && to.path !== '/login') {
         next('/login');
@@ -74,6 +78,10 @@ router.beforeEach((to, from, next) => {
     } else {
         next();
     }
+})
+
+router.afterEach(() => {
+    NProgress.done();
 })
 
 export default router;
