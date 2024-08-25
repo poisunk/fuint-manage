@@ -38,7 +38,6 @@ export const useUserStore = defineStore("user", {
                 getAccountInfo().then((res) => {
                     if (res.data.code == 200) {
                         this.userInfo = res.data.data;
-                        console.log(this.userInfo);
                         resolve(res.data);
                     } else {
                         reject(res.data);

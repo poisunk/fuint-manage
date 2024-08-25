@@ -39,8 +39,7 @@
                 <el-table-column prop="store" label="所属店铺" />
                 <el-table-column prop="url" label="图片">
                     <template #default="scope">
-                        <el-image class="table-item-image" :src="scope.row.imageUrl"
-                            :preview-src-list="[scope.row.imageUrl]" />
+                        <el-image class="table-item-image" :src="scope.row.imageUrl" />
                     </template>
                 </el-table-column>
                 <el-table-column prop="createTime" label="创建时间" width="180" />
@@ -80,11 +79,11 @@
         </template>
     </el-dialog>
 
-    <el-dialog v-model="dialogEditBannerFormVisible" title="编辑轮播图" width="700px" @close="onEditBannerFormClose">
+    <el-dialog v-model="dialogEditBannerFormVisible" title="编辑轮播图" width="700px">
         <v-custom-form ref="editBannerFormRef" v-model="editBannerFormData" :formConfigs="formConfigs" />
         <template #footer>
             <el-button type="primary" @click="handleEditBannerConfirm">确定</el-button>
-            <el-button @click="onEditBannerFormClose">取消</el-button>
+            <el-button @click="dialogEditBannerFormVisible = false">取消</el-button>
         </template>
     </el-dialog>
 </template>
@@ -100,6 +99,7 @@ import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import VCustomForm from '@/components/custom-form/index.vue';
 import { formConfigs } from './banner-form-config';
+import { el } from 'element-plus/es/locale';
 
 const formInline = ref({
     title: '',
@@ -138,6 +138,22 @@ const onSubmitReset = () => {
     }
 };
 
+const handleEditBannerConfirm = () => {
+    editBannerFormRef.value.formRef.validate().then(() => {
+        saveBanner(editBannerFormData.value).then((res) => {
+            if (res.data.code == 200) {
+                successNotification(res.data.message);
+                dialogEditBannerFormVisible.value = false;
+                searchBannerList();
+            } else {
+                errorNotification(res.data.message);
+            }
+        })
+    }).catch(() => {
+        errorNotification('请正确填写表单信息');
+    })
+}
+
 const handleAddBannerConfirm = () => {
     addBannerFormRef.value.formRef.validate().then(() => {
         saveBanner(addBannerFormData.value).then((res) => {
@@ -171,6 +187,12 @@ const handleBannerItemEdit = (row: any) => {
     dialogEditBannerFormVisible.value = true;
     editBannerFormData.value = row;
     editBannerFormData.value.storeId = row.storeId === 0 ? null : row.storeId;
+
+    formConfigs.forEach((item: any) => {
+        if (item.field == 'image') {
+            item.imageUrl = row.imageUrl;
+        }
+    })
 }
 
 const handleBannerItemDelete = (row: any) => {

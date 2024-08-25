@@ -19,7 +19,8 @@
                 </template>
 
                 <template v-if="item.type === 'upload'">
-                    <el-upload class="uploader" action="" :show-file-list="false" :http-request="handleUpload(item)">
+                    <el-upload class="uploader" type="drag" action="" :show-file-list="false"
+                        :http-request="handleUpload(item)">
                         <img v-if="modelValue[item.field]" :src="item.imageUrl" class="uploader-image" />
                         <el-icon v-else class="uploader-icon">
                             <Plus />
@@ -34,6 +35,13 @@
                             {{ option.label }}
                         </el-radio>
                     </el-radio-group>
+                </template>
+
+                <template v-if="item.type === 'input-number'">
+                    <div>
+                        <el-input-number v-model="modelValue[item.field]" />
+                        <div class="input-tips">{{ item.placeholder }}</div>
+                    </div>
                 </template>
             </el-form-item>
         </template>
@@ -125,5 +133,13 @@ defineExpose({
     width: 60px;
     height: 60px;
     text-align: center;
+}
+
+.input-tips {
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 200;
+    line-height: 12px;
+    margin-top: 5px;
 }
 </style>

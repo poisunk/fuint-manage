@@ -6,7 +6,8 @@ type FormType =
     | "radio"
     | "checkbox"
     | "switch"
-    | "upload";
+    | "upload"
+    | "input-number";
 
 interface ItemOption {
     label: string;
