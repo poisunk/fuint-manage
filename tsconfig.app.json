@@ -13,7 +13,7 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     /* Bundler mode */
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -24,7 +24,8 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "strictFunctionTypes": true
   },
   "include": [
     "src/**/*.ts",

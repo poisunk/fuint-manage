@@ -72,41 +72,62 @@
         </el-row>
     </div>
 
-    <VDialogFormBanner v-model="dialogAddBannerFormVisible" title="新增轮播图" ref="addBannerFormRef"
-        @confirm="onBannerItemChange" @cancel="dialogAddBannerFormVisible = false" :storeList="storeList" />
-    <VDialogFormBanner v-model="dialogEditBannerFormVisible" title="编辑轮播图" ref="editBannerFormRef"
-        @confirm="onBannerItemChange" @cancel="dialogEditBannerFormVisible = false" :storeList="storeList" />
+    <el-dialog v-model="dialogAddBannerFormVisible" title="新增轮播图" width="700px" @close="onAddBannerFormClose">
+        <v-custom-form ref="addBannerFormRef" v-model="addBannerFormData" :formConfigs="formConfigs" />
+        <template #footer>
+            <el-button type="primary" @click="handleAddBannerConfirm">确定</el-button>
+            <el-button @click="onAddBannerFormClose">取消</el-button>
+        </template>
+    </el-dialog>
+
+    <el-dialog v-model="dialogEditBannerFormVisible" title="编辑轮播图" width="700px" @close="onEditBannerFormClose">
+        <v-custom-form ref="editBannerFormRef" v-model="editBannerFormData" :formConfigs="formConfigs" />
+        <template #footer>
+            <el-button type="primary" @click="handleEditBannerConfirm">确定</el-button>
+            <el-button @click="onEditBannerFormClose">取消</el-button>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue';
-import { getBannerList, updateBanner } from '../../../api/content';
+import { getBannerList, saveBanner, updateBanner } from '../../../api/content';
 import { onMounted } from 'vue';
 import { ElMessageBox } from 'element-plus';
 import { errorNotification, successNotification } from '../../../utils/notification';
-import VDialogFormBanner from '@/components/dialog-form-banner.vue';
 import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
+import VCustomForm from '@/components/custom-form/index.vue';
+import { formConfigs } from './banner-form-config';
 
 const formInline = ref({
     title: '',
     storeId: '',
     status: '',
 });
-
+const addBannerFormData = ref({
+    title: '',
+    storeId: null,
+    url: '',
+    sort: null,
+    description: '',
+    image: '',
+    status: 'A',
+});
+const editBannerFormData = ref({});
 const storeList = ref([]);
 const bannerListData = ref([]);
 const dialogAddBannerFormVisible = ref(false);
 const dialogEditBannerFormVisible = ref(false);
-const addBannerFormRef = ref();
 const editBannerFormRef = ref();
 const currentPage = ref(1);
 const pageSize = ref(10);
 const total = ref(0);
+const addBannerFormRef = ref();
 
 const onSubmitQuery = () => {
-    searchBannerList(formInline.value.title, formInline.value.storeId, formInline.value.status);
+    searchBannerList();
 }
 
 const onSubmitReset = () => {
@@ -117,9 +138,39 @@ const onSubmitReset = () => {
     }
 };
 
+const handleAddBannerConfirm = () => {
+    addBannerFormRef.value.formRef.validate().then(() => {
+        saveBanner(addBannerFormData.value).then((res) => {
+            if (res.data.code == 200) {
+                successNotification(res.data.message);
+                dialogAddBannerFormVisible.value = false;
+                searchBannerList();
+            } else {
+                errorNotification(res.data.message);
+            }
+        })
+    }).catch(() => {
+        errorNotification('请正确填写表单信息');
+    })
+}
+
+const onAddBannerFormClose = () => {
+    addBannerFormData.value = {
+        title: '',
+        storeId: null,
+        url: '',
+        sort: null,
+        description: '',
+        image: '',
+        status: 'A',
+    }
+    dialogAddBannerFormVisible.value = false;
+}
+
 const handleBannerItemEdit = (row: any) => {
     dialogEditBannerFormVisible.value = true;
-    editBannerFormRef.value.setForm(row);
+    editBannerFormData.value = row;
+    editBannerFormData.value.storeId = row.storeId === 0 ? null : row.storeId;
 }
 
 const handleBannerItemDelete = (row: any) => {
@@ -135,7 +186,7 @@ const handleBannerItemDelete = (row: any) => {
         updateBanner(params).then((res) => {
             if (res.data.code == 200) {
                 successNotification(res.data.message);
-                searchBannerList(formInline.value.title, formInline.value.storeId, formInline.value.status);
+                searchBannerList();
             } else {
                 errorNotification(res.data.message);
             }
@@ -166,13 +217,13 @@ const handleBannerStatusChange = (row: any) => {
     });
 }
 
-const searchBannerList = (title: string, storeId: string, status: string) => {
+const searchBannerList = () => {
     const params = {
         page: currentPage.value,
         pageSize: pageSize.value,
-        title: title,
-        storeId: storeId,
-        status: status
+        title: formInline.title,
+        storeId: formInline.storeId,
+        status: formInline.status
     }
 
     getBannerList(params).then((res) => {
@@ -186,6 +237,9 @@ const searchBannerList = (title: string, storeId: string, status: string) => {
             label: store.name
         }));
         storeList.value.unshift({ value: '0', label: '公共店铺' });
+
+        formConfigs[1].options = storeList.value;
+
         bannerListData.value = data.dataList.content;
         bannerListData.value.forEach((item: any) => {
             item.createTime = new Date(item.createTime).toLocaleString();
@@ -201,17 +255,11 @@ const searchBannerList = (title: string, storeId: string, status: string) => {
 }
 
 const handlePaginationChange = () => {
-    searchBannerList(formInline.value.title, formInline.value.storeId, formInline.value.status);
-}
-
-const onBannerItemChange = () => {
-    searchBannerList(formInline.value.title, formInline.value.storeId, formInline.value.status);
-    dialogAddBannerFormVisible.value = false;
-    dialogEditBannerFormVisible.value = false;
+    searchBannerList();
 }
 
 onMounted(() => {
-    searchBannerList("", "", "");
+    searchBannerList();
 });
 </script>
 
