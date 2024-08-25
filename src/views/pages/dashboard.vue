@@ -148,7 +148,6 @@ getHomeInfo().then(res => {
 })
 
 getHomeStatistics("order,Cuser_active").then(res => {
-    console.log(res.data.data);
     const labels = res.data.data.labels;
     const orderData = res.data.data.data[0];
     const activeUserData = res.data.data.data[1];

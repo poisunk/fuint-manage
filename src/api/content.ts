@@ -1,4 +1,4 @@
-import request from "../util/request.ts"
+import request from "../utils/request.ts"
 
 interface BannerListParams {
     page: number

@@ -1,13 +1,14 @@
 <template>
     <el-dialog v-model="dialogFormVisible" :title="title" width="700px" @close="handleCancel">
-        <el-form ref="bannerFormRef" :model="bannerForm" :rules="rules" label-width="120px" class="banner-form">
-            <el-form-item label="标题" prop="title">
-                <el-input v-model="bannerForm.title" placeholder="请输入标题" />
+        <el-form ref="categoryFormRef" :model="categoryForm" :rules="rules" label-width="120px" class="banner-form">
+            <el-form-item label="分类名称" prop="title">
+                <el-input v-model="categoryForm.name" placeholder="分类名称" />
             </el-form-item>
             <el-form-item label="所属店铺" prop="store">
-                <el-select v-model="bannerForm.storeId" placeholder="所属店铺" clearable>
+                <el-select v-model="bannerForm.storeId" placeholder="所属店铺">
                     <el-option v-for="item in storeList" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
+                <p>提示：未选择则属于公共分类</p>
             </el-form-item>
             <el-form-item label="链接" prop="url">
                 <el-input v-model="bannerForm.url" placeholder="请输入链接" />
@@ -50,7 +51,6 @@
 import { ref } from 'vue';
 import { uploadFile } from '../api/file';
 import { successNotification, errorNotification } from '../utils/notification';
-import { saveBanner } from '../api/content';
 
 defineProps({
     title: String,
@@ -58,24 +58,20 @@ defineProps({
 });
 const emit = defineEmits(['confirm', 'cancel']);
 
-const bannerForm = ref({
-    title: '',
+const categoryForm = ref({
+    name: '',
     storeId: null,
-    url: '',
     sort: null,
-    description: '',
     image: '',
+    description: '',
     status: 'A',
 });
 const imageUrl = ref('');
 const bannerFormRef = ref();
 
 const rules = {
-    title: [
-        { required: true, message: '请输入标题', trigger: 'blur' }
-    ],
-    image: [
-        { required: true, message: '请上传图片', trigger: 'blur' }
+    name: [
+        { required: true, message: '请输入分类名称', trigger: 'blur' }
     ]
 };
 
@@ -85,7 +81,7 @@ const handleUpload = (file: any) => {
     formData.append('file', file);
     uploadFile(formData).then((res) => {
         imageUrl.value = res.data.data.url;
-        bannerForm.value.image = res.data.data.fileName;
+        // bannerForm.value.image = res.data.data.fileName;
     })
 }
 
@@ -95,18 +91,6 @@ const handleConfirm = () => {
             errorNotification('请填写必填项');
             return;
         }
-
-        bannerForm.storeId = bannerForm.storeId === '' ? null : bannerForm.storeId;
-        bannerForm.sort = bannerForm.sort === '' ? null : bannerForm.sort;
-        saveBanner(bannerForm.value).then((res) => {
-            if (res.data.code == 200) {
-                successNotification(res.data.message);
-                emit('confirm');
-                clearForm();
-            } else {
-                errorNotification(res.data.message);
-            }
-        })
     })
 };
 
@@ -118,21 +102,10 @@ const handleCancel = () => {
 
 const clearForm = () => {
     imageUrl.value = '';
-    bannerForm.value = {
-        title: '',
-        storeId: null,
-        url: '',
-        sort: null,
-        description: '',
-        image: '',
-        status: 'A',
-    }
 }
 
 const setForm = (data: any) => {
     imageUrl.value = data.imageUrl;
-    bannerForm.value = data;
-    bannerForm.value.storeId = bannerForm.value.storeId == 0 ? null : bannerForm.value.storeId;
 }
 
 defineExpose({

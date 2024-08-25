@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios from 'axios';
+import { getToken } from './storage';
 
 const server = axios.create({
     baseURL: "http://82.156.2.228:8080",
@@ -8,7 +9,7 @@ const server = axios.create({
 })
 
 server.interceptors.request.use(function (config) {
-    config.headers["Access-Token"] = localStorage.getItem("fuint-admin-token")
+    config.headers["Access-Token"] = getToken("Access-Token");
     return config;
 }, function (error) {
     return Promise.reject(error);

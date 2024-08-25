@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { getCode, doLogin } from "../../api/login.ts";
+import { getCode } from "../../api/login.ts";
 import { UserFilled, Lock } from "@element-plus/icons-vue";
-import { usePermissStore } from '../../store/permiss.ts';
+import { useUserStore } from '../../store/user.ts';
 import router from '../../router/index.ts';
-import { ElNotification } from 'element-plus';
+import { errorNotification, successNotification } from '../../utils/notification.ts';
 
-const permiss = usePermissStore();
+const userStore = useUserStore();
+const loginFormRef = ref();
 
 const identifyingImage = ref("");
 const rememberAccount = ref(false);
@@ -36,31 +37,25 @@ const updateIdentifyingCode = () => {
             identifyingImage.value = data.data.captcha;
             loginParams.value.uuid = data.data.uuid;
         }
-    })
+    });
 }
 
 const login = () => {
-    doLogin(loginParams.value).then((res) => {
-        console.log(res.data);
-        if (res.data.code == 200) {
-            permiss.setToken(res.data.data.token);
-
-            ElNotification({
-                title: "成功",
-                message: "登录成功",
-                type: "success",
-            });
-
-            router.push("/");
-            router.go(0);
-        } else {
-            ElNotification({
-                title: "Error",
-                message: res.data.message,
-                type: "error",
-            });
+    loginFormRef.value.validate((valid: any) => {
+        if (!valid) {
+            errorNotification('请填写必填项');
+            return;
         }
-    })
+
+        userStore.login(loginParams.value).then((res: any) => {
+            if (res.code == 200) {
+                successNotification(res.message);
+                router.push("/dashboard");
+            }
+        }).catch((err: any) => {
+            errorNotification(err.message);
+        })
+    });
 }
 
 updateIdentifyingCode();
@@ -75,7 +70,7 @@ updateIdentifyingCode();
                     <h1>营销管理系统</h1>
                 </el-row>
                 <el-row>
-                    <el-form :model="loginParams" :rules="rules" @submit.native.prevent>
+                    <el-form ref="loginFormRef" :model="loginParams" :rules="rules" @submit.native.prevent>
                         <el-form-item prop="username">
                             <el-input placeholder="账号" v-model="loginParams.username"
                                 :prefix-icon="UserFilled"></el-input>

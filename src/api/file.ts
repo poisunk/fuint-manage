@@ -1,4 +1,4 @@
-import request from "../util/request"
+import request from "../utils/request"
 
 export function uploadFile(data: any) {
     return request({

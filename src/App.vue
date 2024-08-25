@@ -1,18 +1,26 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
-import { getAccountInfo } from './api/login';
 import router from './router';
-import { usePermissStore } from './store/permiss';
+import { useUserStore } from './store/user';
+import { onMounted } from 'vue';
+import { errorNotification } from './utils/notification';
 
-const permiss = usePermissStore();
+const userStore = useUserStore();
 
 onBeforeMount(() => {
-    getAccountInfo().then(res => {
-        if (res.data.code == 401) {
-            permiss.removeToken();
+    if (!userStore.init) {
+        router.push('/login');
+    }
+})
+
+onMounted(() => {
+    if (userStore.init) {
+        userStore.getInfo().catch((err: any) => {
+            userStore.init = false;
+            errorNotification(err.message);
             router.push('/login');
-        }
-    })
+        });
+    }
 })
 </script>
 

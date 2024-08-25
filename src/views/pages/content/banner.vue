@@ -6,7 +6,7 @@
                     <el-input v-model="formInline.title" placeholder="请输入标题" clearable />
                 </el-form-item>
                 <el-form-item label="所属店铺">
-                    <el-select v-model="formInline.store" placeholder="所属店铺" clearable>
+                    <el-select v-model="formInline.storeId" placeholder="所属店铺" clearable>
                         <el-option v-for="item in storeList" :key="item.value" :label="item.label"
                             :value="item.value" />
                     </el-select>
@@ -73,9 +73,9 @@
     </div>
 
     <VDialogFormBanner v-model="dialogAddBannerFormVisible" title="新增轮播图" ref="addBannerFormRef"
-        @confirm="onBannerItemChange" @cancel="dialogAddBannerFormVisible = false" />
+        @confirm="onBannerItemChange" @cancel="dialogAddBannerFormVisible = false" :storeList="storeList" />
     <VDialogFormBanner v-model="dialogEditBannerFormVisible" title="编辑轮播图" ref="editBannerFormRef"
-        @confirm="onBannerItemChange" @cancel="dialogEditBannerFormVisible = false" />
+        @confirm="onBannerItemChange" @cancel="dialogEditBannerFormVisible = false" :storeList="storeList" />
 </template>
 
 <script setup lang="ts">
@@ -84,7 +84,7 @@ import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue';
 import { getBannerList, updateBanner } from '../../../api/content';
 import { onMounted } from 'vue';
 import { ElMessageBox } from 'element-plus';
-import { errorNotification, successNotification } from '../../../util/notification';
+import { errorNotification, successNotification } from '../../../utils/notification';
 import VDialogFormBanner from '@/components/dialog-form-banner.vue';
 import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
@@ -181,13 +181,10 @@ const searchBannerList = (title: string, storeId: string, status: string) => {
         total.value = data.dataList.totalElements;
 
         const imagePath = data.imagePath;
-        storeList.value = [];
-        for (var i = 0; i < res.data.data.storeList.length; i++) {
-            storeList.value.push({
-                value: data.storeList[i].id,
-                label: data.storeList[i].name
-            })
-        }
+        storeList.value = res.data.data.storeList.map((store: any) => ({
+            value: store.id,
+            label: store.name
+        }));
         storeList.value.unshift({ value: '0', label: '公共店铺' });
         bannerListData.value = data.dataList.content;
         bannerListData.value.forEach((item: any) => {

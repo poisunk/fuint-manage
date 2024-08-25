@@ -14,7 +14,7 @@ const onRouter = computed(() => {
 </script>
 
 <template>
-    <el-sidebar class="sidebar">
+    <div class="sidebar">
         <el-menu :default-active="onRouter" mode="vertical" background-color="#304156" text-color="#fff"
             active-text-color="#09989b" unique-opened router>
             <h4>会员营销管理系统</h4>
@@ -46,7 +46,7 @@ const onRouter = computed(() => {
                 </el-menu-item>
             </el-sub-menu>
         </el-menu>
-    </el-sidebar>
+    </div>
 </template>
 
 <style scoped lang="less">
@@ -57,7 +57,6 @@ const onRouter = computed(() => {
     color: white;
     align-items: center;
     display: block;
-    max-width: 200px;
 
     h4 {
         margin: 0;
