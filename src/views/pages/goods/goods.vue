@@ -66,10 +66,10 @@
             <el-table :data="goodsListData" style="width: 100%">
                 <el-table-column prop="id" label="ID" />
                 <el-table-column prop="store" label="所属店铺" />
-                <el-table-column prop="name" label="名称" />
-                <el-table-column prop="logo" label="图片">
+                <el-table-column prop="name" label="商品名称" align="center" width="300" />
+                <el-table-column prop="logo" label="主图" align="center">
                     <template #default="scope">
-                        <el-image class="table-item-logo" :src="scope.row.logoUrl">
+                        <el-image class="table-item-logo" :src="scope.row.logo">
                             <template #error>
                                 <div class="image-slot">
                                     <el-icon>
@@ -80,12 +80,16 @@
                         </el-image>
                     </template>
                 </el-table-column>
+                <el-table-column prop="goodsNo" label="商品条码" align="center" width="150" />
+                <el-table-column prop="stock" label="剩余库存" align="center" />
+                <el-table-column prop="cate" label="所属分类" />
+                <el-table-column prop="price" label="价格" align="center" />
                 <el-table-column prop="createTime" label="创建时间" width="180" />
                 <el-table-column prop="updateTime" label="更新时间" width="180" />
-                <el-table-column label="状态" fixed="right" align="center" width="80">
+                <el-table-column label="上架状态" fixed="right" align="center" width="80">
                     <template #default="scope">
                         <el-switch v-model="scope.row.status" active-value="A" inactive-value="N"
-                            @change="onCategoryStatusChange(scope.row)" />
+                            @change="onGoodsStatusChange(scope.row)" />
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" fixed="right" align="center" width="180">
@@ -112,9 +116,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue';
-import { getGoodsList } from '../../../api/goods';
+import { getGoodsList, updateGoodsStatus } from '../../../api/goods';
 import { onMounted } from 'vue';
-import { errorNotification } from '../../../utils/notification';
+import { errorNotification, successNotification } from '../../../utils/notification';
 import { ElConfigProvider, ElMessageBox } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import { formConfigs } from './category-form-config';
@@ -164,14 +168,14 @@ const handleGoodsItemDelete = (row: any) => {
             id: row.id,
             status: 'D'
         }
-        // updateGoodsStatus(params).then((res) => {
-        //     if (res.data.code == 200) {
-        //         successNotification(res.data.message);
-        //         refreshData();
-        //     } else {
-        //         errorNotification(res.data.message);
-        //     }
-        // })
+        updateGoodsStatus(params).then((res) => {
+            if (res.data.code == 200) {
+                successNotification(res.data.message);
+                refreshData();
+            } else {
+                errorNotification(res.data.message);
+            }
+        })
     })
 }
 
@@ -189,16 +193,16 @@ const onGoodsStatusChange = (row: any) => {
             id: row.id,
             status: row.status
         }
-        // updateGoodsCategoryStatus(params).then((res) => {
-        //     if (res.data.code == 200) {
-        //         successNotification(res.data.message);
-        //         refreshData();
-        //     } else {
-        //         errorNotification(res.data.message);
-        //     }
-        // }).catch(() => {
-        //     errorNotification('更改状态失败');
-        // })
+        updateGoodsStatus(params).then((res) => {
+            if (res.data.code == 200) {
+                successNotification(res.data.message);
+                refreshData();
+            } else {
+                errorNotification(res.data.message);
+            }
+        }).catch(() => {
+            errorNotification('更改状态失败');
+        })
     }).catch(() => {
         row.status = row.status == 'A' ? 'N' : 'A';
     })
@@ -230,8 +234,14 @@ const refreshData = () => {
         goodsListData.value = data.paginationResponse.content;
         goodsListData.value.forEach((item: any) => {
             for (var i = 0; i < storeList.value.length; i++) {
-                if (item.storeId == storeList.value[i].value) {
-                    item.store = storeList.value[i].label;
+                if (item.storeId == storeList.value[i].id) {
+                    item.store = storeList.value[i].name;
+                }
+            }
+
+            for (var i = 0; i < categoryList.value.length; i++) {
+                if (item.cateId == categoryList.value[i].id) {
+                    item.cate = categoryList.value[i].name;
                 }
             }
         })
@@ -283,7 +293,6 @@ onMounted(() => {
     width: 60px;
     height: 50px;
     border-radius: 5px;
-    border: 1px solid #ccc;
 }
 
 .image-slot {

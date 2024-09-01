@@ -101,3 +101,16 @@ export function saveGoods(data: SaveGoodsParams) {
         data: data
     })
 }
+
+interface UpdateGoodsParams {
+    id: string
+    status: string
+}
+
+export function updateGoodsStatus(data: UpdateGoodsParams) {
+    return request({
+        url: "/backendApi/goods/goods/updateStatus",
+        method: "post",
+        data: data
+    })
+}
