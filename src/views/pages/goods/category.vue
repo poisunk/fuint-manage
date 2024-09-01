@@ -286,7 +286,6 @@ const refreshData = () => {
         })
 
         total.value = data.paginationResponse.totalElements;
-        console.log(categoryListData.value);
     })
 }
 

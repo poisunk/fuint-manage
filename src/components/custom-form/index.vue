@@ -18,6 +18,11 @@
                         style="width: 500px;" />
                 </template>
 
+
+                <template v-if="item.type === 'upload'" #label>
+                    <label>{{ item.label }}</label>
+                </template>
+
                 <template v-if="item.type === 'upload'">
                     <el-upload class="uploader" type="drag" action="" :show-file-list="false"
                         :http-request="handleUpload(item)">
@@ -31,9 +36,8 @@
 
                 <template v-if="item.type === 'radio'">
                     <el-radio-group v-model="modelValue[item.field]">
-                        <el-radio v-for="option in item.options" :key="option.value" :label="option.value">
-                            {{ option.label }}
-                        </el-radio>
+                        <el-radio v-for="option in item.options" :key="option.value" :label="option.label"
+                            :value="option.value" />
                     </el-radio-group>
                 </template>
 
@@ -103,6 +107,10 @@ defineExpose({
     width: 240px;
 }
 
+
+:deep(.el-form-item__label) {
+    font-weight: bold;
+}
 
 .uploader {
     width: 60px;

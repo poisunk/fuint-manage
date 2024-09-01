@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { doLogin, getAccountInfo } from "../api/login";
-import { getToken, setToken } from "../utils/storage";
+import { getToken, removeToken, setToken } from "../utils/storage";
 
 interface LoginData {
     username: string
@@ -50,7 +50,7 @@ export const useUserStore = defineStore("user", {
 
         logout() {
             return new Promise((resolve, reject) => {
-                setToken("Access-Token", "");
+                removeToken('Access-Token');
                 this.init = false;
                 this.token = "";
                 resolve(true);

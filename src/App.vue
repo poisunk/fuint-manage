@@ -1,3 +1,7 @@
+<template>
+    <router-view />
+</template>
+
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
 import router from './router';
@@ -24,6 +28,4 @@ onMounted(() => {
 })
 </script>
 
-<template>
-    <router-view />
-</template>
+<style lang="less"></style>

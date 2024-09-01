@@ -49,6 +49,11 @@ const routes = [
                         name: '商品列表',
                         component: () => import('../views/pages/goods/goods.vue')
                     },
+                    {
+                        path: '/goods/add',
+                        name: '添加商品',
+                        component: () => import('../views/pages/goods/add-goods.vue')
+                    }
                 ]
             },
         ]

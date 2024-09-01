@@ -99,7 +99,6 @@ import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import VCustomForm from '@/components/custom-form/index.vue';
 import { formConfigs } from './banner-form-config';
-import { el } from 'element-plus/es/locale';
 
 const formInline = ref({
     title: '',
