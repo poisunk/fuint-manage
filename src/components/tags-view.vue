@@ -5,7 +5,7 @@
                 <span class="tags-title">系统首页</span>
             </router-link>
 
-            <router-link v-for="tag in visitedViews" :key="tag.path" :to="tag.path" class="tags-view-item"
+            <router-link v-for="tag in visitedViews" :key="tag.path" :to="tag.fullPath" class="tags-view-item"
                 :class="isActive(tag.path)">
                 <span class="tags-title">{{ tag.name }}</span>
                 <el-icon class="tags-icon" @click.prevent.stop="closeTag(tag)">

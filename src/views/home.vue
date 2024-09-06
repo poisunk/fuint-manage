@@ -9,10 +9,10 @@
             </el-header>
             <el-main style="padding: 0;">
                 <el-scrollbar>
-                    <router-view v-slot="{ Component, route }" :key="key">
+                    <router-view v-slot="{ Component, route }" :key="route.path">
                         <transition name="fade-transform" mode="out-in">
-                            <keep-alive :include="cacheViews">
-                                <component :is="Component" :key="route.fullPath" />
+                            <keep-alive :include="tagsViewStore.cachedViews">
+                                <component :is="Component" :key="route.path" />
                             </keep-alive>
                         </transition>
                     </router-view>
@@ -23,20 +23,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import VSideBar from '@/components/sidebar.vue';
 import vHeader from '@/components/header.vue';
 import { useTagsViewStore } from '../store/tags-view';
 import { useRoute } from 'vue-router';
 
 const tagsViewStore = useTagsViewStore();
-const cacheViews = computed(() => tagsViewStore.cachedViews);
 
 const route = useRoute();
 
-const key = computed(() => {
-    return route.path
-})
 </script>
 
 <style lang="less" scoped></style>
