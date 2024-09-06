@@ -52,8 +52,13 @@ const routes = [
                     {
                         path: '/goods/add',
                         name: '添加商品',
-                        component: () => import('../views/pages/goods/add-goods.vue')
-                    }
+                        component: () => import('../views/pages/goods/goods-form.vue')
+                    },
+                    {
+                        path: '/goods/edit',
+                        name: '修改商品',
+                        component: () => import('../views/pages/goods/goods-form.vue')
+                    },
                 ]
             },
         ]

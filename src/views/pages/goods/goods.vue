@@ -95,7 +95,7 @@
                 <el-table-column label="操作" fixed="right" align="center" width="180">
                     <template #default="scope">
                         <el-button link type="primary" size="small" :icon="Edit"
-                            @click="handleCategoryItemEdit(scope.row)">编辑</el-button>
+                            @click="handleGoodsItemEdit(scope.row)">编辑</el-button>
                         <el-button link type="primary" size="small" :icon="Delete"
                             @click="handleGoodsItemDelete(scope.row)">删除
                         </el-button>
@@ -180,6 +180,7 @@ const handleGoodsItemDelete = (row: any) => {
 }
 
 const handleGoodsItemEdit = (row: any) => {
+    router.push('/goods/edit?goodsId=' + row.id);
 }
 
 const onGoodsStatusChange = (row: any) => {
