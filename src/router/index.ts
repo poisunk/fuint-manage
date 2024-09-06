@@ -59,6 +59,11 @@ const routes = [
                         name: '修改商品',
                         component: () => import('../views/pages/goods/goods-form.vue')
                     },
+                    {
+                        path: '/goods/stock',
+                        name: '库存管理',
+                        component: () => import('../views/pages/goods/stock.vue')
+                    },
                 ]
             },
         ]

@@ -156,3 +156,66 @@ export function deleteGoodsSpecValue(id: string) {
         method: "get",
     })
 }
+
+interface StockListParams {
+    page: number
+    pageSize: number
+    storeId: string
+    description: string
+    type: string
+}
+
+export function getStockList(data: StockListParams) {
+    return request({
+        url: "/backendApi/stock/list",
+        method: "get",
+        params: data
+    })
+}
+
+interface SaveStockParams {
+    storeId: string
+    description: string
+    type: string
+    goodsList?: any
+}
+
+export function saveStockInfo(data: SaveStockParams) {
+    return request({
+        url: "/backendApi/stock/save",
+        method: "post",
+        data: data
+    })
+}
+
+export function deleteStock(id: string) {
+    return request({
+        url: "/backendApi/stock/delete",
+        method: "post",
+        data: { id: id }
+    })
+}
+
+export function getStockInfo(id: string) {
+    return request({
+        url: "/backendApi/stock/info/" + id,
+        method: "get",
+    })
+}
+
+interface SelectGoodsParams {
+    page?: number
+    pageSize?: number
+    merchantId?: string
+    storeId?: string
+    cateId?: string
+    keyword?: string
+}
+
+export function selectGoodsList(data: SelectGoodsParams) {
+    return request({
+        url: "/backendApi/goods/goods/selectGoods",
+        method: "post",
+        data: data
+    })
+}

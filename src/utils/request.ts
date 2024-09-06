@@ -18,6 +18,7 @@ server.interceptors.request.use(function (config) {
 });
 
 server.interceptors.response.use(function (response) {
+    console.log(response)
     if (response.data.code === 401 || response.data.code === 1001) {
         const userStore = useUserStore();
         userStore.logout().then(() => {

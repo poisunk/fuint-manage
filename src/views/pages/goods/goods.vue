@@ -1,108 +1,104 @@
 <template>
     <div class="container">
-        <el-row>
-            <el-form class="search-form-card" inline="true" :model="formInline" label-width="68px">
-                <el-form-item label="商品名称" prop="name">
-                    <el-input v-model="formInline.name" placeholder="请输入商品名称" clearable />
-                </el-form-item>
+        <el-form class="search-form-card" inline="true" :model="formInline" label-width="68px">
+            <el-form-item label="商品名称" prop="name">
+                <el-input v-model="formInline.name" placeholder="请输入商品名称" clearable />
+            </el-form-item>
 
-                <el-form-item label="所属店铺" prop="storeId">
-                    <el-select v-model="formInline.storeId" placeholder="所属店铺" clearable style="width: 180px;">
-                        <el-option v-for="item in storeList" :key="item.id" :label="item.name" :value="item.id" />
-                    </el-select>
-                </el-form-item>
+            <el-form-item label="所属店铺" prop="storeId">
+                <el-select v-model="formInline.storeId" placeholder="所属店铺" clearable style="width: 180px;">
+                    <el-option v-for="item in storeList" :key="item.id" :label="item.name" :value="item.id" />
+                </el-select>
+            </el-form-item>
 
-                <el-form-item label="商品分类" prop="cateId">
-                    <el-select v-model="formInline.cateId" placeholder="商品分类" clearable style="width: 180px;">
-                        <el-option v-for="item in categoryList" :key="item.id" :label="item.name" :value="item.id" />
-                    </el-select>
-                </el-form-item>
+            <el-form-item label="商品分类" prop="cateId">
+                <el-select v-model="formInline.cateId" placeholder="商品分类" clearable style="width: 180px;">
+                    <el-option v-for="item in categoryList" :key="item.id" :label="item.name" :value="item.id" />
+                </el-select>
+            </el-form-item>
 
-                <el-form-item label="商品条码" prop="goodsNo">
-                    <el-input v-model="formInline.goodsNo" placeholder="请输入商品条码" clearable />
-                </el-form-item>
+            <el-form-item label="商品条码" prop="goodsNo">
+                <el-input v-model="formInline.goodsNo" placeholder="请输入商品条码" clearable />
+            </el-form-item>
 
-                <el-form-item label="商品类型" prop="type">
-                    <el-select v-model="formInline.type" placeholder="商品类型" clearable style="width: 180px;">
-                        <el-option v-for="item in typeList" :key="item.key" :label="item.name" :value="item.value" />
-                    </el-select>
-                </el-form-item>
+            <el-form-item label="商品类型" prop="type">
+                <el-select v-model="formInline.type" placeholder="商品类型" clearable style="width: 180px;">
+                    <el-option v-for="item in typeList" :key="item.key" :label="item.name" :value="item.value" />
+                </el-select>
+            </el-form-item>
 
-                <el-form-item label="规格类型" prop="isSingleSpec">
-                    <el-select v-model="formInline.isSingleSpec" placeholder="规格类型" clearable>
-                        <el-option label="单规格" value="Y" />
-                        <el-option label="多规格" value="N" />
-                    </el-select>
-                </el-form-item>
+            <el-form-item label="规格类型" prop="isSingleSpec">
+                <el-select v-model="formInline.isSingleSpec" placeholder="规格类型" clearable>
+                    <el-option label="单规格" value="Y" />
+                    <el-option label="多规格" value="N" />
+                </el-select>
+            </el-form-item>
 
-                <el-form-item label="上架状态" prop="status">
-                    <el-select v-model="formInline.status" placeholder="上架状态" clearable>
-                        <el-option label="上架" value="A" />
-                        <el-option label="下架" value="N" />
-                    </el-select>
-                </el-form-item>
+            <el-form-item label="上架状态" prop="status">
+                <el-select v-model="formInline.status" placeholder="上架状态" clearable>
+                    <el-option label="上架" value="A" />
+                    <el-option label="下架" value="N" />
+                </el-select>
+            </el-form-item>
 
-                <el-form-item label="库存状态" prop="stock">
-                    <el-select v-model="formInline.stock" placeholder="库存状态" clearable>
-                        <el-option label="有库存" value="Y" />
-                        <el-option label="无库存" value="N" />
-                    </el-select>
-                </el-form-item>
+            <el-form-item label="库存状态" prop="stock">
+                <el-select v-model="formInline.stock" placeholder="库存状态" clearable>
+                    <el-option label="有库存" value="Y" />
+                    <el-option label="无库存" value="N" />
+                </el-select>
+            </el-form-item>
 
-                <el-form-item>
-                    <el-button type="primary" @click="onSubmitQuery" :icon="Search">搜索</el-button>
-                </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="onSubmitQuery" :icon="Search">搜索</el-button>
+            </el-form-item>
 
-                <el-form-item>
-                    <el-button type="default" @click="onSubmitReset" :icon="Refresh">重置</el-button>
-                </el-form-item>
+            <el-form-item>
+                <el-button type="default" @click="onSubmitReset" :icon="Refresh">重置</el-button>
+            </el-form-item>
 
-                <el-form-item>
-                    <el-button type="primary" plain @click="onSubmitAdd" :icon="Plus">新增</el-button>
-                </el-form-item>
-            </el-form>
-        </el-row>
-        <el-row>
-            <el-table :data="goodsListData" style="width: 100%">
-                <el-table-column prop="id" label="ID" />
-                <el-table-column prop="store" label="所属店铺" />
-                <el-table-column prop="name" label="商品名称" align="center" width="300" />
-                <el-table-column prop="logo" label="主图" align="center">
-                    <template #default="scope">
-                        <el-image class="table-item-logo" :src="scope.row.logo">
-                            <template #error>
-                                <div class="image-slot">
-                                    <el-icon>
-                                        <Picture />
-                                    </el-icon>
-                                </div>
-                            </template>
-                        </el-image>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="goodsNo" label="商品条码" align="center" width="150" />
-                <el-table-column prop="stock" label="剩余库存" align="center" />
-                <el-table-column prop="cate" label="所属分类" />
-                <el-table-column prop="price" label="价格" align="center" />
-                <el-table-column prop="createTime" label="创建时间" width="180" />
-                <el-table-column prop="updateTime" label="更新时间" width="180" />
-                <el-table-column label="上架状态" fixed="right" align="center" width="80">
-                    <template #default="scope">
-                        <el-switch v-model="scope.row.status" active-value="A" inactive-value="N"
-                            @change="onGoodsStatusChange(scope.row)" />
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作" fixed="right" align="center" width="180">
-                    <template #default="scope">
-                        <el-button link type="primary" size="small" :icon="Edit"
-                            @click="handleGoodsItemEdit(scope.row)">编辑</el-button>
-                        <el-button link type="primary" size="small" :icon="Delete"
-                            @click="handleGoodsItemDelete(scope.row)">删除
-                        </el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-row>
+            <el-form-item>
+                <el-button type="primary" plain @click="onSubmitAdd" :icon="Plus">新增</el-button>
+            </el-form-item>
+        </el-form>
+        <el-table :data="goodsListData" style="width: 100%">
+            <el-table-column prop="id" label="ID" />
+            <el-table-column prop="store" label="所属店铺" />
+            <el-table-column prop="name" label="商品名称" align="center" width="300" />
+            <el-table-column prop="logo" label="主图" align="center">
+                <template #default="scope">
+                    <el-image class="table-item-logo" :src="scope.row.logo">
+                        <template #error>
+                            <div class="image-slot">
+                                <el-icon>
+                                    <Picture />
+                                </el-icon>
+                            </div>
+                        </template>
+                    </el-image>
+                </template>
+            </el-table-column>
+            <el-table-column prop="goodsNo" label="商品条码" align="center" width="150" />
+            <el-table-column prop="stock" label="剩余库存" align="center" />
+            <el-table-column prop="cate" label="所属分类" />
+            <el-table-column prop="price" label="价格" align="center" />
+            <el-table-column prop="createTime" label="创建时间" width="180" />
+            <el-table-column prop="updateTime" label="更新时间" width="180" />
+            <el-table-column label="上架状态" fixed="right" align="center" width="80">
+                <template #default="scope">
+                    <el-switch v-model="scope.row.status" active-value="A" inactive-value="N"
+                        @change="onGoodsStatusChange(scope.row)" />
+                </template>
+            </el-table-column>
+            <el-table-column label="操作" fixed="right" align="center" width="180">
+                <template #default="scope">
+                    <el-button link type="primary" size="small" :icon="Edit"
+                        @click="handleGoodsItemEdit(scope.row)">编辑</el-button>
+                    <el-button link type="primary" size="small" :icon="Delete"
+                        @click="handleGoodsItemDelete(scope.row)">删除
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
         <el-row class="pagination-row">
             <el-config-provider :locale="zhCn">
                 <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize"
@@ -258,6 +254,7 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .container {
+    width: 100%;
     display: block;
     padding: 20px;
 }
