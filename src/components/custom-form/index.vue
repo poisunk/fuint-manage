@@ -47,6 +47,10 @@
                         <div class="input-tips">{{ item.placeholder }}</div>
                     </div>
                 </template>
+
+                <template v-if="item.type === 'slot'">
+                    <slot :name="item.field"></slot>
+                </template>
             </el-form-item>
         </template>
     </el-form>
@@ -65,6 +69,7 @@ const props = defineProps({
 });
 
 const rules = ref({});
+const formRef = ref();
 
 for (const item of props.formConfigs) {
     if (!item.required) {
@@ -77,8 +82,6 @@ for (const item of props.formConfigs) {
     }];
     Object.assign(rules.value, { [item.field]: rule });
 }
-
-const formRef = ref();
 
 const handleUpload = (item: FormItem) => {
     return (file: any) => {

@@ -221,7 +221,6 @@ const refreshData = () => {
         const data = res.data.data;
 
         storeList.value = res.data.data.storeList;
-        storeList.value.unshift({ id: 0, name: '公共店铺' });
 
         categoryList.value = res.data.data.cateList;
         typeList.value = res.data.data.typeList;

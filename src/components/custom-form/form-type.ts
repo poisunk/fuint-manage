@@ -7,7 +7,9 @@ type FormType =
     | "checkbox"
     | "switch"
     | "upload"
-    | "input-number";
+    | "input-number"
+    | "quill-editor"
+    | "slot";
 
 interface ItemOption {
     label: string;

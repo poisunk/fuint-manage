@@ -378,7 +378,6 @@ const searchStockList = () => {
             value: store.id,
             label: store.name
         }));
-        storeList.value.unshift({ value: 0, label: '公共店铺' });
 
         stockListData.value = data.paginationResponse.content;
         stockListData.value.forEach((item: any) => {

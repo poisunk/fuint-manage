@@ -213,7 +213,7 @@
             <el-tab-pane label="商品介绍" name="description">
                 <div style="width: 375px; margin-left: 80px">
                     <el-form class="form-container" label-width="120px">
-                        <QuillEditor v-model="goodsData.description" :options="editorOption"
+                        <QuillEditor v-model:content="goodsData.description" content-type="html" :options="editorOption"
                             style="min-height: 500px" />
                     </el-form>
                 </div>
@@ -364,9 +364,24 @@ const handleSubmit = () => {
                 }
             });
         });
+    } else if (activeName.value == 'description') {
+        let params = {
+            description: goodsData.value.description
+        }
+
+        if (goodsId.value != 0) {
+            params = Object.assign(params, { goodsId: goodsId.value });
+        }
+
+        saveGoods(params).then((res) => {
+            if (res.data.code == 200) {
+                successNotification(res.data.message);
+            } else {
+                errorNotification(res.data.message);
+            }
+        });
     }
 }
-
 const handleCancel = () => {
     tagsViewStore.delView(router.currentRoute.value);
     router.back();
@@ -670,8 +685,7 @@ onMounted(() => {
     getGoodsInfo(goodsId.value).then((res) => {
         if (res.data.code == 200) {
             typeList.value = res.data.data.typeList;
-            storeList.value = [{ id: 0, name: '公共店铺' }];
-            storeList.value = storeList.value.concat(res.data.data.storeList);
+            storeList.value = res.data.data.storeList;
             cateList.value = res.data.data.cateList;
             imagePath.value = res.data.data.imagePath;
 
