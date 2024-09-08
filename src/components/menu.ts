@@ -1,3 +1,5 @@
+import path from "path";
+
 export const menuData = [
     {
         name: '内容管理',
@@ -17,9 +19,21 @@ export const menuData = [
         ]
     },
     {
+        name: '店铺管理',
+        path: '/store',
+        icon: 'Shop',
+        children: [
+            {
+                name: "店铺列表",
+                path: "/store/list",
+                icon: "CircleCheck",
+            }
+        ]
+    },
+    {
         name: '商品管理',
         path: '/goods',
-        icon: 'Edit',
+        icon: 'Goods',
         children: [
             {
                 name: '商品分类',
@@ -37,5 +51,5 @@ export const menuData = [
                 icon: 'CircleCheck',
             },
         ]
-    }
+    },
 ]

@@ -76,7 +76,7 @@
         </v-custom-form>
         <template #footer>
             <el-button type="primary" @click="handleArticleFormConfirm">确定</el-button>
-            <el-button @click="dialogEditBannerFormVisible = false">取消</el-button>
+            <el-button @click="dialogArticleInfoFormVisible = false">取消</el-button>
         </template>
     </el-dialog>
 </template>
@@ -84,7 +84,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue';
-import { getArticleList, getBannerList, saveArticle, saveBanner, updateArticleStatus, updateBanner } from '../../../api/content';
+import { getArticleList, saveArticle, updateArticleStatus } from '../../../api/content';
 import { onMounted } from 'vue';
 import { ElMessageBox } from 'element-plus';
 import { errorNotification, successNotification } from '../../../utils/notification';
@@ -148,16 +148,8 @@ const onArticleFormClosed = () => {
         image: '',
         status: 'A',
     };
-    setFormImageUrl('image', '');
+    articleInfoFormRef.value.setFormImageUrl('image', '');
     quillEditorRef.value.setText('');
-}
-
-const setFormImageUrl = (fieldName: string, url: string) => {
-    for (const item of formConfigs) {
-        if (item.field == fieldName) {
-            item.imageUrl = url;
-        }
-    }
 }
 
 const handleArticleFormConfirm = () => {
@@ -244,11 +236,10 @@ const handleArticleItemEdit = (row: any) => {
     if (row.image.indexOf(imagePath.value) != -1) {
         row.image = row.image.replace(imagePath.value, '');
     }
-    setFormImageUrl('image', row.image.length == 0 ? '' : imagePath.value + row.image);
-    console.log(row.image ? '' : imagePath.value + row.image)
 
     articleFormData.value = row;
     dialogArticleInfoFormVisible.value = true;
+    articleInfoFormRef.value.setFormImageUrl('image', row.image.length == 0 ? '' : imagePath.value + row.image);
 }
 
 const searchArticleList = () => {

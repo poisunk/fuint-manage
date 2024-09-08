@@ -48,6 +48,13 @@
                     </div>
                 </template>
 
+                <template v-if="item.type === 'upload-file'">
+                    <el-upload v-model:file-list="item.fileList" :limit="1" :http-request="handleFileUpload(item)"
+                        :on-exceed="handleFileExceed" :on-remove="handleFileRemove(item)" style="width: 500px;">
+                        <el-button type="primary" :icon="Upload">点击上传</el-button>
+                    </el-upload>
+                </template>
+
                 <template v-if="item.type === 'slot'">
                     <slot :name="item.field"></slot>
                 </template>
@@ -59,7 +66,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { FormItem } from './form-type';
-import { uploadFile } from '../../api/file';
+import { backendUploadFile, uploadFile } from '../../api/file';
+import { Upload } from '@element-plus/icons-vue';
+import { ElMessage } from 'element-plus';
 
 const props = defineProps({
     title: String,
@@ -94,10 +103,51 @@ const handleUpload = (item: FormItem) => {
             }
         });
     };
-};
+}
+
+const handleFileUpload = (item: FormItem) => {
+    if (item.fileList.length > 0) {
+        item.fileList = [];
+    }
+    return (file: any) => {
+        const formData = new FormData();
+        formData.append('file', file.file);
+        backendUploadFile(formData).then((res: any) => {
+            if (res.data.code === 200) {
+                props.modelValue[item.field] = res.data.data.fileName;
+            }
+        });
+    };
+}
+
+const handleFileExceed = () => {
+    ElMessage.warning('只能上传一个文件');
+}
+
+const handleFileRemove = (item: FormItem) => {
+    props.modelValue[item.field] = '';
+}
+
+const setFormFieldValue = (fieldName: string, valueName: string, value: any) => {
+    for (const item of props.formConfigs) {
+        if (item.field == fieldName) {
+            item[valueName] = value;
+        }
+    }
+}
+
+const setFieldOptions = (fieldName: string, options: any) => {
+    setFormFieldValue(fieldName, 'options', options);
+}
+
+const setFormImageUrl = (fieldName: string, url: string) => {
+    setFormFieldValue(fieldName, 'imageUrl', url);
+}
 
 defineExpose({
-    formRef
+    formRef,
+    setFormImageUrl,
+    setFieldOptions
 })
 </script>
 

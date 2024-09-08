@@ -36,6 +36,17 @@ const routes = [
                 ]
             },
             {
+                path: '/store',
+                name: '店铺管理',
+                children: [
+                    {
+                        path: '/store/list',
+                        name: '店铺列表',
+                        component: () => import('../views/pages/store/list/index.vue')
+                    }
+                ]
+            },
+            {
                 path: '/goods',
                 name: '商品管理',
                 children: [

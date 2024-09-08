@@ -10,3 +10,14 @@ export function uploadFile(data: any) {
         data: data
     })
 }
+
+export function backendUploadFile(data: any) {
+    return request({
+        url: "/backendApi/file/upload",
+        method: "post",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
+        },
+        data: data
+    })
+}
