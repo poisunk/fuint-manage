@@ -257,6 +257,7 @@ const searchBannerList = () => {
             value: store.id,
             label: store.name
         }));
+        storeList.value.unshift({ value: 0, label: '公共店铺' });
 
         formConfigs[1].options = storeList.value;
 

@@ -31,8 +31,8 @@
                     <el-form-item label="所属店铺" prop="storeId">
                         <div>
                             <el-select v-model="goodsData.storeId" placeholder="所属店铺" clearable>
-                                <el-option v-for="item in storeList" :key="item.id" :label="item.name"
-                                    :value="item.id" />
+                                <el-option v-for="item in storeList" :key="item.value" :label="item.label"
+                                    :value="item.value" />
                             </el-select>
                             <div class="input-tips">提示: 未选择则属于公共商品</div>
                         </div>
@@ -684,14 +684,20 @@ onMounted(() => {
     goodsId.value = route.query.goodsId ? route.query.goodsId : 0;
     getGoodsInfo(goodsId.value).then((res) => {
         if (res.data.code == 200) {
-            typeList.value = res.data.data.typeList;
-            storeList.value = res.data.data.storeList;
-            cateList.value = res.data.data.cateList;
-            imagePath.value = res.data.data.imagePath;
+            const data = res.data.data;
+            typeList.value = data.typeList;
+            storeList.value = data.storeList.map((store: any) => ({
+                value: store.id,
+                label: store.name
+            }));
+            storeList.value.unshift({ value: 0, label: '公共店铺' });
 
-            if (res.data.data.goods) {
-                goodsData.value = res.data.data.goods;
-                goodsData.value.images = res.data.data.images;
+            cateList.value = data.cateList;
+            imagePath.value = data.imagePath;
+
+            if (data.goods) {
+                goodsData.value = data.goods;
+                goodsData.value.images = data.images;
                 imageFileList.value = goodsData.value.images.map((item: any) => {
                     return {
                         name: item,
@@ -700,7 +706,7 @@ onMounted(() => {
                 });
             }
 
-            specList.value = res.data.data.specData;
+            specList.value = data.specData;
             for (let i = 0; i < specList.value.length; i++) {
                 // 过滤掉没有名称的规格
                 specList.value[i].child = specList.value[i].child.filter((item: any) => {
@@ -716,7 +722,7 @@ onMounted(() => {
                 })
             }
 
-            skuDataList.value = res.data.data.skuData;
+            skuDataList.value = data.skuData;
             skuDataList.value = skuDataList.value.map((item: any) => {
                 if (item.logo) {
                     item.logoUrl = imagePath.value + item.logo

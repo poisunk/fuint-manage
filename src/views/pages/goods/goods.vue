@@ -220,7 +220,11 @@ const refreshData = () => {
 
         const data = res.data.data;
 
-        storeList.value = res.data.data.storeList;
+        storeList.value = data.storeList.map((store: any) => ({
+            value: store.id,
+            label: store.name
+        }));
+        storeList.value.unshift({ value: 0, label: '公共店铺' });
 
         categoryList.value = res.data.data.cateList;
         typeList.value = res.data.data.typeList;

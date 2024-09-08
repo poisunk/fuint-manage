@@ -1,5 +1,3 @@
-import { placeholderSign } from "element-plus/es/components/table-v2/src/private";
-
 export const formConfigs = [
     {
         type: 'input',
