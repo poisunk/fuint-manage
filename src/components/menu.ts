@@ -31,6 +31,18 @@ export const menuData = [
         ]
     },
     {
+        name: '会员管理',
+        path: '/member',
+        icon: 'User',
+        children: [
+            {
+                name: "会员等级",
+                path: "/member/grade",
+                icon: "CircleCheck",
+            }
+        ]
+    },
+    {
         name: '商品管理',
         path: '/goods',
         icon: 'Goods',
