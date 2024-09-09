@@ -63,6 +63,17 @@ const routes = [
                 ]
             },
             {
+                path: '/coupon',
+                name: '卡卷管理',
+                children: [
+                    {
+                        path: '/coupon/group',
+                        name: '分组管理',
+                        component: () => import('../views/pages/coupon/group/index.vue')
+                    }
+                ]
+            },
+            {
                 path: '/goods',
                 name: '商品管理',
                 children: [

@@ -1,5 +1,3 @@
-import path from "path";
-
 export const menuData = [
     {
         name: '内容管理',
