@@ -56,3 +56,78 @@ export function deleteMemberGrade(userGradeId: number) {
         method: "get",
     })
 }
+
+interface MemberListParams {
+    page: number
+    pageSize: number
+    name: string
+    mobile: string
+    status: string
+}
+
+export function getMemberList(params: MemberListParams) {
+    return request({
+        url: "/backendApi/member/list",
+        method: "get",
+        params: params
+    })
+}
+
+interface UpdateMemberStatusParams {
+    userId: number
+    status: string
+}
+
+export function updateMemberStatus(params: UpdateMemberStatusParams) {
+    return request({
+        url: "/backendApi/member/updateStatus",
+        method: "post",
+        data: params
+    })
+}
+
+export function deleteMember(userId: number) {
+    return request({
+        url: "/backendApi/member/delete/" + userId,
+        method: "get",
+    })
+}
+
+interface SaveMemberParams {
+    id: string
+    name: string
+    storeId: number
+    groupId: number
+    gradeId: number
+    startTime: string
+    endTime: string
+    userNo: string
+    mobile: string
+    sex: string
+    idcard: string
+    birthday: string
+    address: string
+    status: string
+    description: string
+}
+
+export function saveMember(params: SaveMemberParams) {
+    return request({
+        url: "/backendApi/member/save",
+        method: "post",
+        data: params
+    })
+}
+
+interface ResetMemberPasswordParams {
+    userId: number
+    password: string
+}
+
+export function resetMemberPassword(params: ResetMemberPasswordParams) {
+    return request({
+        url: "/backendApi/member/resetPwd",
+        method: "post",
+        data: params
+    })
+}

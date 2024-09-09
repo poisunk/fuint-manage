@@ -55,6 +55,16 @@
                     </el-upload>
                 </template>
 
+                <template v-if="item.type === 'date-range'">
+                    <el-config-provider :locale="zhCn">
+                        <el-date-picker v-model="modelValue[item.field.split('|')[0]]" type="datetime"
+                            placeholder="开始日期" value-format="YYYY-MM-DD HH:mm:ss" />
+                        ~
+                        <el-date-picker v-model="modelValue[item.field.split('|')[1]]" type="datetime"
+                            placeholder="结束日期" value-format="YYYY-MM-DD HH:mm:ss" />
+                    </el-config-provider>
+                </template>
+
                 <template v-if="item.type === 'slot'">
                     <slot :name="item.field"></slot>
                 </template>
@@ -69,6 +79,8 @@ import { FormItem } from './form-type';
 import { backendUploadFile, uploadFile } from '../../api/file';
 import { Upload } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
+import { ElConfigProvider } from 'element-plus';
+import zhCn from 'element-plus/es/locale/lang/zh-cn';
 
 const props = defineProps({
     title: String,

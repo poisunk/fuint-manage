@@ -142,7 +142,6 @@ export function saveGoodsSpecValue(data: SaveSpecValueParams) {
     })
 }
 
-
 export function deleteGoodsSpec(goodsId: string, specName: string) {
     return request({
         url: "/backendApi/goods/goods/deleteSpec?goodsId=" + goodsId + " &specName=" + specName,

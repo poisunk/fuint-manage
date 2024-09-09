@@ -36,8 +36,25 @@ export const menuData = [
         icon: 'User',
         children: [
             {
+                name: "会员列表",
+                path: "/member/list",
+                icon: "CircleCheck",
+            },
+            {
                 name: "会员等级",
                 path: "/member/grade",
+                icon: "CircleCheck",
+            },
+        ]
+    },
+    {
+        name: '卡卷管理',
+        path: '/coupon',
+        icon: 'Ticket',
+        children: [
+            {
+                name: "分组管理",
+                path: "/coupon/group",
                 icon: "CircleCheck",
             }
         ]

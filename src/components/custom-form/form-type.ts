@@ -8,7 +8,7 @@ type FormType =
     | "switch"
     | "upload"
     | "input-number"
-    | "quill-editor"
+    | "date-range"
     | "slot";
 
 interface ItemOption {
