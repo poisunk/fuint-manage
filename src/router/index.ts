@@ -64,12 +64,17 @@ const routes = [
             },
             {
                 path: '/coupon',
-                name: '卡卷管理',
+                name: '卡券管理',
                 children: [
                     {
                         path: '/coupon/group',
                         name: '分组管理',
                         component: () => import('../views/pages/coupon/group/index.vue')
+                    },
+                    {
+                        path: '/coupon/list',
+                        name: '卡券列表',
+                        component: () => import('../views/pages/coupon/list/index.vue')
                     }
                 ]
             },

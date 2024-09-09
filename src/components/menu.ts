@@ -46,13 +46,18 @@ export const menuData = [
         ]
     },
     {
-        name: '卡卷管理',
+        name: '卡券管理',
         path: '/coupon',
         icon: 'Ticket',
         children: [
             {
                 name: "分组管理",
                 path: "/coupon/group",
+                icon: "CircleCheck",
+            },
+            {
+                name: "卡券列表",
+                path: "/coupon/list",
                 icon: "CircleCheck",
             }
         ]

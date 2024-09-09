@@ -50,3 +50,61 @@ export function deleteCouponGroup(id: string) {
         method: 'get',
     })
 }
+
+export function quickSearchCouponGroupList() {
+    return request({
+        url: '/backendApi/couponGroup/quickSearch',
+        method: 'get',
+    })
+}
+
+interface CouponListParams {
+    page: number
+    pageSize: number
+    id: string
+    groupId: string
+    name: string
+    type: string
+    status: string
+}
+
+export function getCouponList(params: CouponListParams) {
+    return request({
+        url: '/backendApi/coupon/list',
+        method: 'get',
+        params
+    })
+}
+
+interface SaveCouponParams {
+    id: string
+    type: string
+    groupId: string
+    name: string
+    expireType: string
+    expireTime: string
+    beginTime: string
+    endTime: string
+    amount: string
+    sendWay: string
+    total: string
+    outRule: string
+    isGive: string
+    goodsIds: any
+    inRule: any
+}
+
+export function saveCoupon(params: SaveCouponParams) {
+    return request({
+        url: '/backendApi/coupon/save',
+        method: 'post',
+        data: params
+    })
+}
+
+export function deleteCoupon(id: string) {
+    return request({
+        url: '/backendApi/coupon/delete/' + id,
+        method: 'get',
+    })
+}
