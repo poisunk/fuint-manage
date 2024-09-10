@@ -138,3 +138,54 @@ export function getTotalMember() {
         method: "get",
     })
 }
+
+interface MemberGroupListParams {
+    page: number
+    pageSize: number
+    name: string
+    id: string
+    status: string
+}
+
+export function getMemberGroupList(params: MemberGroupListParams) {
+    return request({
+        url: "/backendApi/memberGroup/list",
+        method: "get",
+        params: params
+    })
+}
+
+interface SaveMemberGroupParams {
+    id: string
+    name: string
+    description: string
+    status: string
+}
+
+export function saveMemberGroup(params: SaveMemberGroupParams) {
+    return request({
+        url: "/backendApi/memberGroup/save",
+        method: "post",
+        data: params
+    })
+}
+
+export function deleteMemberGroup(id: number) {
+    return request({
+        url: "/backendApi/memberGroup/delete/" + id,
+        method: "get",
+    })
+}
+
+interface UpdateMemberGroupStatusParams {
+    id: number
+    status: string
+}
+
+export function updateMemberGroupStatus(params: UpdateMemberGroupStatusParams) {
+    return request({
+        url: "/backendApi/memberGroup/updateStatus",
+        method: "post",
+        data: params
+    })
+}

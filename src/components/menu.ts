@@ -34,6 +34,11 @@ export const menuData = [
         icon: 'User',
         children: [
             {
+                name: "会员分组",
+                path: "/member/group",
+                icon: "CircleCheck",
+            },
+            {
                 name: "会员列表",
                 path: "/member/list",
                 icon: "CircleCheck",

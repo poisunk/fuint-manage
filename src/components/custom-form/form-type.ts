@@ -24,6 +24,7 @@ export interface FormItem {
     options?: ItemOption[];
     required?: boolean;
     imageUrl?: string;
-    fileList?: any[]
+    fileList?: any[];
+    isDisabled?: boolean;
 }
 

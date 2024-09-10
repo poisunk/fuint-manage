@@ -3,7 +3,8 @@
         <template v-for="item in formConfigs" :key="item.label">
             <el-form-item :label="item.label" :prop="item.field">
                 <template v-if="item.type === 'input'">
-                    <el-input v-model="modelValue[item.field]" :placeholder="item.placeholder" />
+                    <el-input v-model="modelValue[item.field]" :placeholder="item.placeholder"
+                        :disabled="item.isDisabled" />
                 </template>
 
                 <template v-if="item.type === 'select'">
@@ -14,7 +15,7 @@
                 </template>
 
                 <template v-if="item.type === 'textarea'">
-                    <el-input v-model="modelValue[item.field]" type="textarea" :placeholder="item.placeholder"
+                    <el-input v-model="modelValue[item.field]" type="textarea" :placeholder="item.placeholder" rows="3"
                         style="width: 500px;" />
                 </template>
 

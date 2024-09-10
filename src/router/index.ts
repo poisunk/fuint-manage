@@ -51,6 +51,11 @@ const routes = [
                 name: '会员管理',
                 children: [
                     {
+                        path: '/member/group',
+                        name: '会员分组',
+                        component: () => import('../views/pages/member/group/index.vue')
+                    },
+                    {
                         path: '/member/list',
                         name: '会员列表',
                         component: () => import('../views/pages/member/list/index.vue')
