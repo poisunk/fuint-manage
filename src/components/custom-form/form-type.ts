@@ -9,6 +9,7 @@ type FormType =
     | "upload"
     | "input-number"
     | "date-range"
+    | "tree-select"
     | "slot";
 
 interface ItemOption {
@@ -26,5 +27,6 @@ export interface FormItem {
     imageUrl?: string;
     fileList?: any[];
     isDisabled?: boolean;
+    multiple?: boolean;
 }
 

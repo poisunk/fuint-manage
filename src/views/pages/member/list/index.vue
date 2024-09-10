@@ -25,9 +25,8 @@
                 </el-form-item>
 
                 <el-form-item label="会员分组">
-                    <el-select v-model="formInline.groupId" placeholder="会员分组" clearable>
-                        <el-option v-for="item in groupList" :key="item.id" :label="item.name" :value="item.id" />
-                    </el-select>
+                    <el-tree-select v-model="formInline.groupIds" :data="groupList" multiple
+                        :render-after-expand="false" placeholder="会员分组" clearable />
                 </el-form-item>
 
                 <el-form-item label="状态">
@@ -233,7 +232,7 @@ const formInline = ref({
     userNo: '',
     name: '',
     gradeId: '',
-    groupIds: '',
+    groupIds: [],
     status: '',
     storeIds: '',
 });
@@ -262,9 +261,14 @@ const onSubmitQuery = () => {
 
 const onSubmitReset = () => {
     formInline.value = {
+        mobile: '',
+        id: '',
+        userNo: '',
         name: '',
-        catchType: '',
+        gradeId: '',
+        groupIds: [],
         status: '',
+        storeIds: '',
     }
     searchTableList();
 }
@@ -445,7 +449,8 @@ const searchTableList = () => {
     const params = {
         page: currentPage.value,
         pageSize: pageSize.value,
-        ...formInline.value
+        ...formInline.value,
+        groupIds: formInline.value.groupIds.length > 0 ? formInline.value.groupIds.join(',') : '',
     }
 
     getMemberList(params).then((res) => {
@@ -456,18 +461,10 @@ const searchTableList = () => {
 
         const data = res.data.data;
 
-        gradeList.value = data.userGradeList.map((grade: any) => ({
-            ...grade,
-            value: grade.id,
-            label: grade.name
-        }));
+        gradeList.value = listToSelectList(data.userGradeList);
         data.storeList.unshift({ id: 0, name: '公共店铺' })
-        storeList.value = data.storeList.map((store: any) => ({
-            ...store,
-            value: store.id,
-            label: store.name
-        }))
-        groupList.value = data.groupList;
+        storeList.value = listToSelectList(data.storeList);
+        groupList.value = listToSelectList(data.groupList);
 
         total.value = data.paginationResponse.totalElements;
 
@@ -487,6 +484,19 @@ const handlePaginationChange = () => {
     searchTableList();
 }
 
+
+const listToSelectList = (list: any) => {
+    return list.map((item: any) => {
+        if (item.children && item.children.length > 0) {
+            item.children = listToSelectList(item.children);
+        }
+        return {
+            ...item,
+            value: item.id,
+            label: item.name
+        }
+    })
+}
 
 const setFormFieldValue = (fieldName: string, valueName: string, value: any) => {
     for (const item of formConfigs) {

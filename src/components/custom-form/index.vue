@@ -66,6 +66,11 @@
                     </el-config-provider>
                 </template>
 
+                <template v-if="item.type === 'tree-select'">
+                    <el-tree-select v-model="modelValue[item.field]" :data="item.options" :multiple="item.multiple"
+                        :render-after-expand="false" :placeholder="item.placeholder" clearable />
+                </template>
+
                 <template v-if="item.type === 'slot'">
                     <slot :name="item.field"></slot>
                 </template>

@@ -14,7 +14,7 @@ export const formConfigs = [
         options: [],
     },
     {
-        type: 'select',
+        type: 'tree-select',
         label: '会员分组',
         field: 'groupId',
         placeholder: '会员分组',
