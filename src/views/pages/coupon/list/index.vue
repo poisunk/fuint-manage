@@ -75,11 +75,12 @@
                 </el-table-column>
                 <el-table-column label="操作" fixed="right" align="center" width="200">
                     <template #default="scope">
+                        <el-button link type="primary" size="small" :icon="Plus"
+                            @click="handleItemSendCoupon(scope.row)">发券</el-button>
                         <el-button link type="primary" size="small" :icon="Edit"
                             @click="handleItemEdit(scope.row)">编辑</el-button>
                         <el-button link type="primary" size="small" :icon="Delete"
-                            @click="handleItemDelete(scope.row)">删除
-                        </el-button>
+                            @click="handleItemDelete(scope.row)">删除</el-button>
                     </template>
 
                 </el-table-column>
@@ -246,6 +247,43 @@
             <el-button @click="dialogInfoFormVisible = false">取消</el-button>
         </template>
     </el-dialog>
+
+
+    <el-dialog v-model="dialogSendCouponFormVisible" title="发放卡券" @closed="onSendCouponFormClosed">
+        <el-form ref="sendCouponFormRef" :model="sendCouponFormData" :rules="sendCouponFormRules" label-width="120px">
+            <el-form-item prop="name" label="卡券名称">
+                <el-input v-model="sendCouponFormData.name" placeholder="请输入卡券名称" style="width: 300px" disabled />
+            </el-form-item>
+
+            <el-form-item prop="object" label="发放对象">
+                <div style="vertical-align: middle;">
+                    <el-radio-group v-model="sendCouponFormData.object">
+                        <el-radio label="部分用户" value="part" />
+                        <el-radio label="全部用户" value="all" />
+
+                        <el-button v-if="sendCouponFormData.object === 'part'" type="primary"
+                            @click="onSelectUser">选择会员（已选择0人）</el-button>
+                        <el-button v-if="sendCouponFormData.object === 'all'" type="danger">总会员数：{{
+                            totalMember }}</el-button>
+                    </el-radio-group>
+                </div>
+            </el-form-item>
+
+            <el-form-item prop="num" label="发放数量">
+                <el-input v-model="sendCouponFormData.num" placeholder="请输入发放数量" style="width: 500px" />
+            </el-form-item>
+
+            <el-form-item prop="remark" label="备注">
+                <el-input v-model="sendCouponFormData.remark" type="textarea" placeholder="请输入备注" rows="5"
+                    style="width: 500px" />
+            </el-form-item>
+        </el-form>
+
+        <template #footer>
+            <el-button type="primary" @click="onSendCouponFormConfirm">确定</el-button>
+            <el-button @click="dialogSendCouponFormVisible = false">取消</el-button>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -256,9 +294,10 @@ import { ElMessageBox } from 'element-plus';
 import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import { errorNotification, successNotification } from '../../../../utils/notification';
-import { deleteCoupon, getCouponList, quickSearchCouponGroupList, saveCoupon } from '../../../../api/coupon';
+import { deleteCoupon, getCouponList, quickSearchCouponGroupList, saveCoupon, sendCounpon } from '../../../../api/coupon';
 import { uploadFile } from '../../../../api/file';
 import { formatDate } from '../../../../utils/date-utils';
+import { getTotalMember } from '../../../../api/member';
 
 class InfoFormData {
     id: string = ''
@@ -296,6 +335,16 @@ class InlineFormData {
     status: string = ''
 }
 
+class SendCouponFormData {
+    couponId: string
+    userIds: string
+    mobile: string
+    num: number
+    remark: string
+    object: string = 'part'
+    name: string
+}
+
 const formInline = ref(new InlineFormData());
 const tableListData = ref([]);
 const infoFormData = ref(new InfoFormData());
@@ -309,6 +358,7 @@ const currentPage = ref(1);
 const pageSize = ref(10);
 const total = ref(0);
 const dialogInfoFormVisible = ref(false);
+const dialogSendCouponFormVisible = ref(false);
 const dialogTitle = ref('');
 const infoFormRef = ref({});
 const infoFormRules = {
@@ -323,6 +373,12 @@ const infoFormRules = {
     inRule: [{ required: true, message: '请输入该项', trigger: 'blur' }],
 }
 const imagePath = ref('');
+const sendCouponFormData = ref(new SendCouponFormData());
+const sendCouponFormRef = ref({});
+const sendCouponFormRules = {
+    num: [{ required: true, message: '请输入发放数量', trigger: 'blur' }],
+}
+const totalMember = ref(0);
 
 const onSubmitQuery = () => {
     searchTableList();
@@ -349,6 +405,47 @@ const handleItemEdit = (row: any) => {
     infoFormData.value.imageUrl = row.image ? imagePath.value + row.image : '/static/defaultImage/coupon.png';
     dialogTitle.value = '编辑卡券';
     dialogInfoFormVisible.value = true;
+}
+
+const handleItemSendCoupon = (row: any) => {
+    sendCouponFormData.value.couponId = row.id;
+    sendCouponFormData.value.name = row.name;
+    dialogSendCouponFormVisible.value = true;
+}
+
+const onSendCouponFormClosed = () => {
+    sendCouponFormData.value = new SendCouponFormData();
+    dialogSendCouponFormVisible.value = false;
+}
+
+const onSendCouponFormConfirm = () => {
+    sendCouponFormRef.value.validate().then(() => {
+        ElMessageBox.confirm('您确认要发放卡券吗？', '系统提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }).then(() => {
+            const params = {
+                couponId: sendCouponFormData.value.couponId,
+                userIds: sendCouponFormData.value.userIds,
+                mobile: sendCouponFormData.value.mobile,
+                num: sendCouponFormData.value.num,
+                object: sendCouponFormData.value.object,
+            }
+
+            sendCounpon(params).then((res) => {
+                if (res.data.code != 200) {
+                    errorNotification(res.data.message);
+                    return;
+                }
+
+                successNotification(res.data.message);
+                dialogSendCouponFormVisible.value = false;
+            })
+        })
+    }).catch(() => {
+        errorNotification('请检查表单内容是否有误');
+    })
 }
 
 const handleItemDelete = (row: any) => {
@@ -475,6 +572,13 @@ const handleUpload = (file: any) => {
 
 onMounted(() => {
     searchTableList();
+
+    getTotalMember().then((res) => {
+        if (res.data.code != 200) {
+            return;
+        }
+        totalMember.value = res.data.data.totalMember;
+    })
 });
 </script>
 

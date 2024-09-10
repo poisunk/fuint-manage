@@ -131,3 +131,10 @@ export function resetMemberPassword(params: ResetMemberPasswordParams) {
         data: params
     })
 }
+
+export function getTotalMember() {
+    return request({
+        url: "/backendApi/statistic/totalMember",
+        method: "get",
+    })
+}

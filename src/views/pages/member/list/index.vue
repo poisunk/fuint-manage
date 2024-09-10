@@ -471,7 +471,11 @@ const searchTableList = () => {
 
         total.value = data.paginationResponse.totalElements;
 
-        tableListData.value = data.paginationResponse.content;
+        tableListData.value = data.paginationResponse.content.map((item: any) => {
+            item.groupId = item.groupId === 0 ? null : item.groupId;
+            item.gradeId = Number(item.gradeId);
+            return item;
+        })
 
         setFormFieldValue('storeId', 'options', storeList.value);
         setFormFieldValue('groupId', 'options', groupList.value);

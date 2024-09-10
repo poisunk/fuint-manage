@@ -108,3 +108,19 @@ export function deleteCoupon(id: string) {
         method: 'get',
     })
 }
+
+interface SendCounponparams {
+    couponId: string
+    userIds: string
+    mobile: string
+    num: string
+    object: string
+}
+
+export function sendCounpon(params: SendCounponparams) {
+    return request({
+        url: '/backendApi/coupon/sendCoupon',
+        method: 'get',
+        params
+    })
+}
