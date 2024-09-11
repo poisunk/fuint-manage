@@ -95,7 +95,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import VCustomForm from '@/components/custom-form/index.vue';
 import { errorNotification, successNotification } from '../../../../utils/notification';
 import { formConfigs } from './form-config';
-import { deleteMemberGroup, getMemberGroupList, saveMemberGroup, updateMemberGroupStatus } from '../../../../api/member';
+import { deleteMemberGroup, searchMemberGroupList, saveMemberGroup, updateMemberGroupStatus } from '../../../../api/member';
 
 class InfoFormData {
     id: string = ''
@@ -250,7 +250,7 @@ const searchTableList = () => {
         ...formInline.value
     }
 
-    getMemberGroupList(params).then((res) => {
+    searchMemberGroupList(params).then((res) => {
         if (res.data.code != 200) {
             errorNotification(res.data.message);
             return;

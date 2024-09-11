@@ -68,15 +68,17 @@
                     </template>
                 </el-table-column>
 
-                <el-table-column label="状态" fixed="right" align="center">
+                <el-table-column label="状态" align="center">
                     <template #default="scope">
                         {{ scope.row.status === 'A' ? '启用' : '禁用' }}
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" fixed="right" align="center" width="200">
+                <el-table-column label="操作" fixed="right" align="center" width="260">
                     <template #default="scope">
                         <el-button link type="primary" size="small" :icon="Plus"
                             @click="handleItemSendCoupon(scope.row)">发券</el-button>
+                        <el-button link type="primary" size="small" :icon="CopyDocument"
+                            @click="handleItemShowQrcode(scope.row)">二维码</el-button>
                         <el-button link type="primary" size="small" :icon="Edit"
                             @click="handleItemEdit(scope.row)">编辑</el-button>
                         <el-button link type="primary" size="small" :icon="Delete"
@@ -262,7 +264,8 @@
                         <el-radio label="全部用户" value="all" />
 
                         <el-button v-if="sendCouponFormData.object === 'part'" type="primary"
-                            @click="onSelectUser">选择会员（已选择0人）</el-button>
+                            @click="onSelectMember">选择会员（已选择{{ selectMemberIds.length > 0 ?
+                                selectMemberIds.split(',').length : 0 }}人）</el-button>
                         <el-button v-if="sendCouponFormData.object === 'all'" type="danger">总会员数：{{
                             totalMember }}</el-button>
                     </el-radio-group>
@@ -284,11 +287,62 @@
             <el-button @click="dialogSendCouponFormVisible = false">取消</el-button>
         </template>
     </el-dialog>
+
+    <el-dialog v-model="dialogSelectMemberVisible" title="选择会员" width="1020px" @closed="onSelectMemberDialogClosed">
+        <div class="select-member-content">
+            <div class="group-list">
+                <div class="search">
+                    <el-input v-model="selectMemberGroupKeyword" placeholder="请输入会员号，手机号" />
+                    <el-button type="primary" @click="onSearch">查询</el-button>
+                </div>
+                <el-tree :data="memberGroupList" :props="defaultTreeProps" show-checkbox :render-after-expand="false"
+                    @check-change="handleMemberSelectCheckChange" />
+            </div>
+
+            <div class="member-list">
+                <el-alert class="tips" :title="`共${selectMemberTableData.length}名会员，已选择${selectedMemberList.length}名会员`"
+                    type="error" :closable="false" />
+                <el-table :data="selectMemberTableData" style="width: 100%"
+                    @selection-change="handleSelectMemberTableChange">
+                    <el-table-column type="selection" width="55" />
+                    <el-table-column prop="userNo" label="会员号" />
+                    <el-table-column prop="name" label="名称" />
+                    <el-table-column prop="mobile" label="手机号">
+                        <template #default="scope">
+                            {{ scope.row.mobile ? scope.row.mobile : '-' }}
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+
+        <template #footer>
+            <el-button type="primary" @click="onSelectMemberTableConfirm">确定</el-button>
+            <el-button @click="dialogSelectMemberVisible = false">取消</el-button>
+        </template>
+    </el-dialog>
+
+    <el-dialog v-model="dialogQrcodeVisible" title="查看二维码" width="500px">
+        <div v-loading="qrcodeLoading" class="dialog-qr">
+            <div class="qr-detail">
+                <div class="qr-title">小程序：</div>
+                <el-image class="qr-code" :src="qrCodeData.minAppQrCode" />
+            </div>
+            <div class="qr-detail">
+                <div class="qr-title">H5：</div>
+                <el-image class="qr-code" :src="qrCodeData.h5QrCode" />
+            </div>
+        </div>
+
+        <template #footer>
+            <el-button type="primary" @click="dialogQrcodeVisible = false">取消</el-button>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue';
+import { Search, Refresh, Plus, Edit, Delete, CopyDocument } from '@element-plus/icons-vue';
 import { onMounted } from 'vue';
 import { ElMessageBox } from 'element-plus';
 import { ElConfigProvider } from 'element-plus';
@@ -297,7 +351,10 @@ import { errorNotification, successNotification } from '../../../../utils/notifi
 import { deleteCoupon, getCouponList, quickSearchCouponGroupList, saveCoupon, sendCounpon } from '../../../../api/coupon';
 import { uploadFile } from '../../../../api/file';
 import { formatDate } from '../../../../utils/date-utils';
-import { getTotalMember } from '../../../../api/member';
+import { getMemberGroupList, getTotalMember, searchMemberList } from '../../../../api/member';
+import { Tree } from 'element-plus/es/components/tree-v2/src/types';
+import { debounce } from '../../../../store/instruction';
+import { createQrcode } from '../../../../api/common';
 
 class InfoFormData {
     id: string = ''
@@ -359,6 +416,8 @@ const pageSize = ref(10);
 const total = ref(0);
 const dialogInfoFormVisible = ref(false);
 const dialogSendCouponFormVisible = ref(false);
+const dialogSelectMemberVisible = ref(false);
+const dialogQrcodeVisible = ref(false);
 const dialogTitle = ref('');
 const infoFormRef = ref({});
 const infoFormRules = {
@@ -379,6 +438,22 @@ const sendCouponFormRules = {
     num: [{ required: true, message: '请输入发放数量', trigger: 'blur' }],
 }
 const totalMember = ref(0);
+const defaultTreeProps = {
+    children: 'children',
+    label: 'name',
+    value: 'id',
+}
+const memberGroupList = ref([]);
+const selectMemberGroupKeyword = ref([]);
+const selectMemberGroupIds = ref('');
+const selectMemberTableData = ref([]);
+const selectedMemberList = ref([]);
+const selectMemberIds = ref('');
+const qrCodeData = ref({
+    h5QrCode: '',
+    minAppQrCode: '',
+})
+const qrcodeLoading = ref(false);
 
 const onSubmitQuery = () => {
     searchTableList();
@@ -415,7 +490,93 @@ const handleItemSendCoupon = (row: any) => {
 
 const onSendCouponFormClosed = () => {
     sendCouponFormData.value = new SendCouponFormData();
+    selectMemberIds.value = '';
     dialogSendCouponFormVisible.value = false;
+}
+
+const onSelectMember = () => {
+    dialogSelectMemberVisible.value = true;
+
+    getMemberGroupList().then((res) => {
+        if (res.data.code != 200) {
+            errorNotification(res.data.message);
+            return;
+        }
+
+        memberGroupList.value = res.data.data;
+    })
+}
+
+const onSelectMemberDialogClosed = () => {
+    selectMemberTableData.value = [];
+}
+
+const onSelectMemberTableConfirm = () => {
+    selectMemberIds.value = selectMemberTableData.value.map((item: any) => {
+        return item.id
+    }).join(',');
+    dialogSelectMemberVisible.value = false;
+}
+
+const handleItemShowQrcode = (row: any) => {
+    dialogQrcodeVisible.value = true;
+    qrcodeLoading.value = true;
+
+    const parms = {
+        id: row.id,
+        type: 'coupon'
+    }
+
+    createQrcode(parms).then((res) => {
+        if (res.data.code != 200) {
+            errorNotification(res.data.message);
+            return;
+        }
+
+        qrCodeData.value = res.data.data;
+        qrcodeLoading.value = false;
+    })
+}
+
+const handleMemberSelectCheckChange = (data: any, checked: boolean, immediate: boolean) => {
+    console.log(data, checked, immediate);
+    if (data.children.length > 0) {
+        return;
+    }
+    if (checked) {
+        selectMemberGroupIds.value += data.id + ',';
+    } else {
+        selectMemberGroupIds.value = selectMemberGroupIds.value.replace(
+            data.id + ',',
+            ''
+        );
+    }
+    updateSelectMemberTable();
+}
+
+const updateSelectMemberTable = debounce(() => {
+    if (selectMemberGroupIds.value.length == 0) {
+        selectMemberTableData.value = [];
+        return;
+    }
+
+    const params = {
+        keyword: selectMemberGroupKeyword.value,
+        groupIds: selectMemberGroupIds.value.slice(0, -1),
+    }
+
+    searchMemberList(params).then((res) => {
+        if (res.data.code != 200) {
+            errorNotification(res.data.message);
+            return;
+        }
+
+        selectMemberTableData.value = res.data.data;
+    })
+}, 500);
+
+const handleSelectMemberTableChange = (val: any) => {
+    selectedMemberList.value = val;
 }
 
 const onSendCouponFormConfirm = () => {
@@ -468,10 +629,17 @@ const handleItemDelete = (row: any) => {
 
 const onInfoFormConfirm = () => {
     infoFormRef.value.validate().then(() => {
-        const params = {
+        console.log(infoFormData.value);
+
+        let params = {
             ...infoFormData.value,
             gradeIds: infoFormData.value.gradeIds ? infoFormData.value.gradeIds.join(',') : '',
-            inRule: infoFormData.value.inRule.length > 0 ? infoFormData.value.inRule.map((item: any) => item.join('_')).join(',') : '',
+        }
+
+        if (infoFormData.value.inRule && infoFormData.value.inRule.length > 0) {
+            params.inRule = infoFormData.value.inRule.map((item: any) => item.join('_')).join(',');
+        } else {
+            params.inRule = '';
         }
 
         saveCoupon(params).then((res) => {
@@ -530,8 +698,7 @@ const searchTableList = () => {
             item.imageUrl = imagePath.value + item.image;
             item.groupName = groupList.value.filter((group: any) => group.id == item.groupId)[0].name;
             item.typeName = typeList.value.filter((type: any) => type.value == item.type)[0].name;
-            item.gradeIds = item.gradeIds.length == 0 ? [] : item.gradeIds.split(',');
-            item.gradeIds = item.gradeIds.map((item: any) => gradeList.value.filter((grade: any) => grade.id == item)[0].name);
+            item.gradeIds = item.gradeIds.length == 0 ? [] : item.gradeIds.split(',').map((id: any) => Number(id));
             item.inRule = item.inRule.length == 0 ? [] : item.inRule.split(',').map((item: any) => item.split('_'));
             item.isGive = item.isGive ? '1' : '0';
             item.isAllGoods = item.goodsIds ? '1' : '0';
@@ -540,6 +707,8 @@ const searchTableList = () => {
             item.endTime = formatDate(new Date(item.endTime), 'yyyy-MM-dd HH:mm:ss');
             return item;
         });
+
+        console.log(gradeList.value);
     })
 
     if (couponGroupList.value.length == 0) {
@@ -667,5 +836,76 @@ onMounted(() => {
     width: 60px;
     height: 60px;
     text-align: center;
+}
+
+.select-member-content {
+    height: 400px;
+    margin: 10px;
+
+    .group-list {
+        width: 300px;
+        height: 400px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        overflow-y: scroll;
+        float: left;
+
+        .search {
+            margin: 0;
+
+            .el-input {
+                width: 190px;
+                height: 36px;
+            }
+
+            .el-button {
+                padding: 10px 20px;
+                margin-left: 2px;
+                font-size: 14px;
+            }
+        }
+
+        .el-tree {
+            margin-top: 10px;
+        }
+    }
+
+    .member-list {
+        width: 600px;
+        height: 400px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-left: 20px;
+        float: left;
+
+        .tips {
+            font-size: 14px;
+            top: 25px;
+            position: absolute;
+            width: 400px;
+            height: 37px;
+        }
+    }
+}
+
+.dialog-qr {
+    margin: 10px;
+
+    .qr-detail {
+        margin-bottom: 10px;
+        text-align: center;
+
+        .qr-title {
+            font-weight: bold;
+            font-size: 16px;
+            padding-right: 100px;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            border: 1px solid #ccc;
+        }
+    }
 }
 </style>

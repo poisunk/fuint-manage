@@ -147,7 +147,7 @@ interface MemberGroupListParams {
     status: string
 }
 
-export function getMemberGroupList(params: MemberGroupListParams) {
+export function searchMemberGroupList(params: MemberGroupListParams) {
     return request({
         url: "/backendApi/memberGroup/list",
         method: "get",
@@ -187,5 +187,25 @@ export function updateMemberGroupStatus(params: UpdateMemberGroupStatusParams) {
         url: "/backendApi/memberGroup/updateStatus",
         method: "post",
         data: params
+    })
+}
+
+export function getMemberGroupList() {
+    return request({
+        url: "/backendApi/member/groupList",
+        method: "get",
+    })
+}
+
+interface SearchMemberListParams {
+    groupIds: string
+    keyword: string
+}
+
+export function searchMemberList(params: SearchMemberListParams) {
+    return request({
+        url: "/backendApi/member/searchMembers",
+        method: "get",
+        params: params
     })
 }
