@@ -301,6 +301,7 @@ onMounted(() => {
 }
 
 .table-order-sn {
-    color: #cbdfff;
+    color: #20b8ff;
+    cursor: pointer;
 }
 </style>

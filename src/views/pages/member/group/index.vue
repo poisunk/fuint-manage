@@ -34,7 +34,7 @@
             <el-table :data="tableListData" row-key="id" style="width: 100%">
                 <el-table-column prop="name" label="分组名称" align="center" />
                 <el-table-column prop="id" label="分组ID" align="center" />
-                <el-table-column prop="num" label="会员数量" align="center" />
+                <el-table-column prop="memberNum" label="会员数量" align="center" />
 
                 <el-table-column prop="createTime" label="创建时间">
                     <template #default="scope">

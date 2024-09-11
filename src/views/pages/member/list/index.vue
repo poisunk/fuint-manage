@@ -85,7 +85,7 @@
 
                 <el-table-column prop="balance" label="余额" align="center">
                     <template #default="scope">
-                        <span style="color: red;">{{ scope.row.balance.toFixed(2) }}</span>
+                        <div style="color: red;">{{ scope.row.balance.toFixed(2) }}</div>
                         <el-button type="primary" @click="onOpenBalanceForm(scope.row)" size="small">充值</el-button>
                     </template>
                 </el-table-column>
