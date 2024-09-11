@@ -68,6 +68,18 @@ export const menuData = [
         ]
     },
     {
+        name: '订单管理',
+        path: '/order',
+        icon: 'List',
+        children: [
+            {
+                name: "订单列表",
+                path: "/order/list",
+                icon: "CircleCheck",
+            }
+        ]
+    },
+    {
         name: '商品管理',
         path: '/goods',
         icon: 'Goods',

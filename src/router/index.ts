@@ -84,6 +84,17 @@ const routes = [
                 ]
             },
             {
+                path: '/order',
+                name: '订单管理',
+                children: [
+                    {
+                        path: '/order/list',
+                        name: '订单列表',
+                        component: () => import('../views/pages/order/list/index.vue')
+                    }
+                ]
+            },
+            {
                 path: '/goods',
                 name: '商品管理',
                 children: [

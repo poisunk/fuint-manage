@@ -64,7 +64,7 @@
             <el-table-column prop="id" label="ID" />
             <el-table-column prop="store" label="所属店铺" />
             <el-table-column prop="name" label="商品名称" align="center" width="300" />
-            <el-table-column prop="logo" label="主图" align="center">
+            <el-table-column prop="logo" label="主图" align="center" width="100">
                 <template #default="scope">
                     <el-image class="table-item-logo" :src="scope.row.logo">
                         <template #error>
@@ -221,10 +221,11 @@ const refreshData = () => {
         const data = res.data.data;
 
         storeList.value = data.storeList.map((store: any) => ({
+            ...store,
             value: store.id,
             label: store.name
         }));
-        storeList.value.unshift({ value: 0, label: '公共店铺' });
+        storeList.value.unshift({ id: 0, name: '公共店铺' });
 
         categoryList.value = res.data.data.cateList;
         typeList.value = res.data.data.typeList;
