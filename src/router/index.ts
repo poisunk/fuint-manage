@@ -91,6 +91,11 @@ const routes = [
                         path: '/order/list',
                         name: '订单列表',
                         component: () => import('../views/pages/order/list/index.vue')
+                    },
+                    {
+                        path: '/order/detail',
+                        name: '订单详情',
+                        component: () => import('../views/pages/order/detail/index.vue')
                     }
                 ]
             },

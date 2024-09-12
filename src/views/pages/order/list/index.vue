@@ -68,7 +68,7 @@
                 <el-table-column prop="id" label="订单ID" width="80" />
                 <el-table-column prop="orderSn" label="订单号" align="center" width="200">
                     <template #default="scope">
-                        <span class="table-order-sn">{{ scope.row.orderSn }}</span>
+                        <span class="table-order-sn" @click="openOrderDetail(scope.row)">{{ scope.row.orderSn }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="userInfo.name" label="会员名称" align="center" width="80" />
@@ -160,6 +160,7 @@ import VCustomForm from '@/components/custom-form/index.vue';
 import { errorNotification, successNotification } from '../../../../utils/notification';
 import { deleteCouponGroup, getCouponGroupList, saveCouponGroup, updateCouponGroupStatus } from '../../../../api/coupon';
 import { searchOrderList } from '../../../../api/order';
+import router from '../../../../router';
 
 class InlineFormData {
     userId: string
@@ -193,6 +194,10 @@ const onSubmitQuery = () => {
 const onSubmitReset = () => {
     formInline.value = new InlineFormData();
     searchTableList();
+}
+
+const openOrderDetail = (row: any) => {
+    router.push("/order/detail?orderId=" + row.id);
 }
 
 const handleItemDelete = (row: any) => {

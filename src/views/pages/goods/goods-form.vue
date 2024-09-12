@@ -179,7 +179,7 @@
                         </div>
                     </el-form-item>
 
-                    <el-form-item v-if="goodsData.type = 'coupon'" prop="coupnIds" label="卡券ID">
+                    <el-form-item v-if="goodsData.type == 'coupon'" prop="coupnIds" label="卡券ID">
                         <div>
                             <el-input v-model="goodsData.coupnIds" placeholder="请输入购买的卡券ID，英文逗号分隔，如：1000,1001,1002"
                                 clearable type="textarea" style="width: 500px" />

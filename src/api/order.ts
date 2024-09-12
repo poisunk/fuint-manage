@@ -29,3 +29,10 @@ export function deleteOrder(id: string) {
         method: "get",
     });
 }
+
+export function getOrderInfo(id: string) {
+    return request({
+        url: "/backendApi/order/info/" + id,
+        method: "get",
+    });
+}
