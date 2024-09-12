@@ -91,25 +91,8 @@
                         </el-radio-group>
                     </el-form-item>
 
-                    <el-form-item v-if="goodsData.isSingleSpec === 'Y'" label="库存数量" prop="stock">
-                        <el-input v-model="goodsData.stock" placeholder="请输入库存数量" clearable />
-                    </el-form-item>
 
-                    <el-form-item v-if="goodsData.isSingleSpec === 'Y'" label="商品价格" prop="price">
-                        <div>
-                            <el-input v-model="goodsData.price" placeholder="请输入商品价格" clearable />
-                            <div class="input-tips">单位：元</div>
-                        </div>
-                    </el-form-item>
-
-                    <el-form-item v-if="goodsData.isSingleSpec === 'Y'" label="划线价格" prop="linePrice">
-                        <div>
-                            <el-input v-model="goodsData.linePrice" placeholder="请输入划线价格" clearable />
-                            <div class="input-tips">单位：元</div>
-                        </div>
-                    </el-form-item>
-
-                    <el-form-item v-else label="商品规格" prop="spec">
+                    <el-form-item v-if="goodsData.isSingleSpec === 'N'" label="商品规格" prop="spec">
                         <div class="spec-list">
                             <div class="spec-list-head">
                                 <el-button @click="addSpec" type="primary">添加规格</el-button>
@@ -196,6 +179,33 @@
                         </div>
                     </el-form-item>
 
+                    <el-form-item v-if="goodsData.type = 'coupon'" prop="coupnIds" label="卡券ID">
+                        <div>
+                            <el-input v-model="goodsData.coupnIds" placeholder="请输入购买的卡券ID，英文逗号分隔，如：1000,1001,1002"
+                                clearable type="textarea" style="width: 500px" />
+                            <div class="input-tips">提示：购买的卡券ID，英文逗号分隔</div>
+                        </div>
+                    </el-form-item>
+
+                    <el-form-item v-if="goodsData.isSingleSpec === 'Y'" label="库存数量" prop="stock">
+                        <el-input v-model="goodsData.stock" placeholder="请输入库存数量" clearable />
+                    </el-form-item>
+
+                    <el-form-item v-if="goodsData.isSingleSpec === 'Y'" label="商品价格" prop="price">
+                        <div>
+                            <el-input v-model="goodsData.price" placeholder="请输入商品价格" clearable />
+                            <div class="input-tips">单位：元</div>
+                        </div>
+                    </el-form-item>
+
+                    <el-form-item v-if="goodsData.isSingleSpec === 'Y'" label="划线价格" prop="linePrice">
+                        <div>
+                            <el-input v-model="goodsData.linePrice" placeholder="请输入划线价格" clearable />
+                            <div class="input-tips">单位：元</div>
+                        </div>
+                    </el-form-item>
+
+
                     <el-form-item label=" 初始销量" prop="initSale">
                         <div>
                             <el-input v-model="goodsData.initSale" type="number" placeholder="请输入初始销量" clearable />
@@ -272,6 +282,7 @@ const goodsData = ref({
     initSale: 0,
     salePoint: '',
     description: '',
+    couponIds: '',
 });
 const specSetting = ref({
     skuNo: '',
@@ -343,7 +354,7 @@ const handleSubmit = () => {
                 params = Object.assign(params, { goodsId: goodsId.value });
             }
 
-            if (goodsData.isSingleSpec === 'Y') {
+            if (goodsData.value.isSingleSpec == 'Y') {
                 params = Object.assign(params, {
                     stock: goodsData.value.stock,
                     price: goodsData.value.price,
@@ -354,6 +365,10 @@ const handleSubmit = () => {
                     specList: goodsData.value.specList,
                     skuData: skuDataList.value
                 });
+            }
+
+            if (goodsData.value.type == 'coupon') {
+                params = Object.assign(params, { couponIds: goodsData.value.couponIds });
             }
 
             saveGoods(params).then((res) => {
@@ -573,7 +588,6 @@ const onRemoveSpecValue = (item: any, isLast: boolean) => {
             }
             return true;
         });
-        console.log(skuDataList.value, item.id);
     } else {
         skuDataList.value = skuDataList.value.map((skuData: any) => {
             let specIds = skuData.specIds.split('-');
@@ -658,6 +672,7 @@ const extensionFormRules = {
     isSingleSpec: [{ required: true, message: '规格类型不能为空', trigger: 'blur' }],
     stock: [{ required: true, message: '库存数量不能为空', trigger: 'blur' }],
     price: [{ required: true, message: '商品价格不能为空', trigger: 'blur' }],
+    coupnIds: [{ required: true, message: '优惠券ID不能为空', trigger: 'blur' }],
 }
 
 const editorOption = {
