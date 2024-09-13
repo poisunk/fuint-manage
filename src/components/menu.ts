@@ -81,6 +81,11 @@ export const menuData = [
                 name: "售后订单",
                 path: "/order/refund",
                 icon: "CircleCheck",
+            },
+            {
+                name: "交易设置",
+                path: "/order/setting",
+                icon: "CircleCheck",
             }
         ]
     },

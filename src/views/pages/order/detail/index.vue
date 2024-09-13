@@ -216,7 +216,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .main-panel {
     margin: 20px;
     border: 1px solid #b7b7b7;

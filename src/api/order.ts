@@ -69,3 +69,24 @@ export function saveRefund(params: SaveRefundParams) {
         data: params
     });
 }
+
+export function getOrderSetting() {
+    return request({
+        url: "/backendApi/order/setting",
+        method: "get",
+    });
+}
+
+interface SaveOrderSettingParams {
+    deliveryFee: string
+    deliveryMinAmount: string
+    isClose: boolean
+}
+
+export function saveOrderSetting(params: SaveOrderSettingParams) {
+    return request({
+        url: "/backendApi/order/saveSetting",
+        method: "post",
+        data: params
+    });
+}
