@@ -137,5 +137,17 @@ export const menuData = [
                 icon: 'CircleCheck',
             }
         ],
+    },
+    {
+        name: '充值管理',
+        path: '/balance',
+        icon: 'CreditCard',
+        children: [
+            {
+                name: '充值设置',
+                path: '/balance/setting',
+                icon: 'CircleCheck',
+            }
+        ],
     }
 ]

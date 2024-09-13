@@ -165,6 +165,17 @@ const routes = [
                         component: () => import('../views/pages/point/record/index.vue')
                     },
                 ]
+            },
+            {
+                path: '/balance',
+                name: '充值管理',
+                children: [
+                    {
+                        path: '/balance/setting',
+                        name: '充值设置',
+                        component: () => import('../views/pages/balance/setting/index.vue')
+                    },
+                ]
             }
         ]
     },

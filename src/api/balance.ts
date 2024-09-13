@@ -14,3 +14,24 @@ export function doBalanceRecharge(params: BalanceRechargeParams) {
         data: params
     })
 }
+
+export function getBalanceSetting() {
+    return resquest({
+        url: '/backendApi/balance/setting',
+        method: 'get'
+    })
+}
+
+interface SaveBalanceSettingParams {
+    rechargeItem: string
+    remark: string
+    status: string
+}
+
+export function saveBalanceSetting(params: SaveBalanceSettingParams) {
+    return resquest({
+        url: '/backendApi/balance/saveSetting',
+        method: 'post',
+        data: params
+    })
+}
