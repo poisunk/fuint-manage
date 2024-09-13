@@ -14,3 +14,26 @@ export function doPointRecharge(params: PointRechargeParams) {
         data: params
     })
 }
+
+export function getPointSetting() {
+    return resquest({
+        url: '/backendApi/point/setting',
+        method: 'get',
+    })
+}
+
+interface SavePointSettingParams {
+    pointNeedConsume: string
+    canUsedAsMoney: string
+    exchangeNeedPoint: string
+    rechargePointSpeed: string
+    status: string
+}
+
+export function savePointSetting(params: SavePointSettingParams) {
+    return resquest({
+        url: '/backendApi/point/saveSetting',
+        method: 'post',
+        data: params
+    })
+}

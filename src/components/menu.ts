@@ -121,4 +121,16 @@ export const menuData = [
             },
         ]
     },
+    {
+        name: '积分管理',
+        path: '/point',
+        icon: 'Coin',
+        children: [
+            {
+                name: '积分设置',
+                path: '/point/setting',
+                icon: 'CircleCheck',
+            },
+        ],
+    }
 ]

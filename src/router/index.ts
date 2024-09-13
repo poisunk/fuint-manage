@@ -150,6 +150,17 @@ const routes = [
                     },
                 ]
             },
+            {
+                path: '/point',
+                name: '积分管理',
+                children: [
+                    {
+                        path: '/point/setting',
+                        name: '积分设置',
+                        component: () => import('../views/pages/point/setting/index.vue')
+                    },
+                ]
+            }
         ]
     },
 
