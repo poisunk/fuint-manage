@@ -12,59 +12,68 @@ const onRouter = computed(() => {
 
 <template>
     <div class="sidebar">
-        <el-menu :default-active="onRouter" mode="vertical" background-color="#304156" text-color="#fff"
-            active-text-color="#09989b" unique-opened router>
-            <h4>会员营销管理系统</h4>
+        <div class="sidebar-header">
+            <div class="sidebar-title">会员营销管理系统</div>
             <div class="info-card">
                 <div id="username">系统管理员</div>
                 <div id="user-role">(管理员角色)</div>
             </div>
-
-            <el-menu-item index="/dashboard">
-                <el-icon>
-                    <Menu />
-                </el-icon>
-                <span>系统首页</span>
-            </el-menu-item>
-
-            <el-sub-menu v-for="item in menuData" :key="item.name" :index="item.path">
-                <template #title>
-                    <el-icon size="14">
-                        <component :is="item.icon"></component>
+        </div>
+        <el-scrollbar>
+            <el-menu :default-active="onRouter" mode="vertical" background-color="#304156" text-color="#fff"
+                active-text-color="#09989b" unique-opened router>
+                <el-menu-item index="/dashboard">
+                    <el-icon>
+                        <Menu />
                     </el-icon>
-                    <span>{{ item.name }}</span>
-                </template>
-                <el-menu-item class="sub-menu-item" v-for="subItem in item.children" :key="subItem.name"
-                    :index="subItem.path">
-                    <el-icon size="14">
-                        <component :is="subItem.icon"></component>
-                    </el-icon>
-                    <span>{{ subItem.name }}</span>
+                    <span>系统首页</span>
                 </el-menu-item>
-            </el-sub-menu>
-        </el-menu>
+
+                <el-sub-menu v-for="item in menuData" :key="item.name" :index="item.path">
+                    <template #title>
+                        <el-icon size="14">
+                            <component :is="item.icon"></component>
+                        </el-icon>
+                        <span>{{ item.name }}</span>
+                    </template>
+                    <el-menu-item class="sub-menu-item" v-for="subItem in item.children" :key="subItem.name"
+                        :index="subItem.path">
+                        <el-icon size="14">
+                            <component :is="subItem.icon"></component>
+                        </el-icon>
+                        <span>{{ subItem.name }}</span>
+                    </el-menu-item>
+                </el-sub-menu>
+            </el-menu>
+        </el-scrollbar>
     </div>
 </template>
 
 <style scoped lang="less">
 .sidebar {
-    flex: 1.5;
     height: 100vh;
     background-color: #304156;
     color: white;
     align-items: center;
-    display: block;
+    overflow: hidden;
 
-    h4 {
-        margin: 0;
-        padding: 10px 0;
-        text-align: center;
+
+    .sidebar-header {
+        height: 100px;
     }
 
-    .el-menu {
-        height: 100vh;
-        font-size: 14px;
+    .el-scrollbar {
+        height: calc(100vh - 100px);
     }
+}
+
+.sidebar-title {
+    margin: 0;
+    padding: 10px 0;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: white;
 }
 
 .info-card {

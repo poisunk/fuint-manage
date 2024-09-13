@@ -1,6 +1,6 @@
 <template>
     <el-container>
-        <el-aside width="200px">
+        <el-aside>
             <v-side-bar />
         </el-aside>
         <el-container style="height: 100vh">
@@ -34,4 +34,10 @@ const route = useRoute();
 
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.el-aside {
+    height: 100vh;
+    width: 200px;
+    overflow: hidden;
+}
+</style>
