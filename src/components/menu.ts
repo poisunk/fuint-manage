@@ -76,6 +76,11 @@ export const menuData = [
                 name: "订单列表",
                 path: "/order/list",
                 icon: "CircleCheck",
+            },
+            {
+                name: "售后订单",
+                path: "/order/refund",
+                icon: "CircleCheck",
             }
         ]
     },

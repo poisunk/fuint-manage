@@ -36,3 +36,36 @@ export function getOrderInfo(id: string) {
         method: "get",
     });
 }
+
+interface RefundListParams {
+    page: number
+    pageSize: number
+    orderSn: string
+    mobile: string
+    userId: string
+    status: string
+    startTime: string
+    endTime: string
+}
+
+export function searchRefundList(params: RefundListParams) {
+    return request({
+        url: "/backendApi/refund/list",
+        method: "get",
+        params
+    });
+}
+
+interface SaveRefundParams {
+    refundId: string
+    status: string
+    rejectReason: string
+}
+
+export function saveRefund(params: SaveRefundParams) {
+    return request({
+        url: "/backendApi/refund/save",
+        method: "post",
+        data: params
+    });
+}
