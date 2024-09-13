@@ -159,6 +159,11 @@ const routes = [
                         name: '积分设置',
                         component: () => import('../views/pages/point/setting/index.vue')
                     },
+                    {
+                        path: '/point/record',
+                        name: '积分明细',
+                        component: () => import('../views/pages/point/record/index.vue')
+                    },
                 ]
             }
         ]

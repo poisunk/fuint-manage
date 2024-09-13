@@ -131,6 +131,11 @@ export const menuData = [
                 path: '/point/setting',
                 icon: 'CircleCheck',
             },
+            {
+                name: '积分明细',
+                path: '/point/record',
+                icon: 'CircleCheck',
+            }
         ],
     }
 ]

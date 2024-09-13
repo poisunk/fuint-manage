@@ -37,3 +37,20 @@ export function savePointSetting(params: SavePointSettingParams) {
         data: params
     })
 }
+
+interface PointListParams {
+    page: number
+    pageSize: number
+    userId: string
+    userNo: string
+    mobile: string
+    status: string
+}
+
+export function getPointList(params: PointListParams) {
+    return resquest({
+        url: '/backendApi/point/list',
+        method: 'get',
+        params
+    })
+}
