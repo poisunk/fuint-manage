@@ -263,3 +263,25 @@ export function deleteOpenGift(id: number) {
         method: "get",
     })
 }
+
+export function getMemberSetting() {
+    return request({
+        url: "/backendApi/member/setting",
+        method: "get",
+    })
+}
+
+interface SaveMemberSettingParams {
+    getCouponNeedPhone: string
+    loginNeedPhone: string
+    openWxCard: string
+    submitOrderNeedPhone: string
+}
+
+export function saveMemberSetting(params: SaveMemberSettingParams) {
+    return request({
+        url: "/backendApi/member/saveSetting",
+        method: "post",
+        data: params
+    })
+}

@@ -69,6 +69,11 @@ const routes = [
                         path: '/member/openGift',
                         name: '开卡赠礼',
                         component: () => import('../views/pages/member/open-gift/index.vue')
+                    },
+                    {
+                        path: '/member/setting',
+                        name: '会员设置',
+                        component: () => import('../views/pages/member/setting/index.vue')
                     }
                 ]
             },
