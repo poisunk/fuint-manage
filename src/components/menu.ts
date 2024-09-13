@@ -48,6 +48,11 @@ export const menuData = [
                 path: "/member/grade",
                 icon: "CircleCheck",
             },
+            {
+                name: "开卡赠礼",
+                path: "/member/openGift",
+                icon: "CircleCheck",
+            }
         ]
     },
     {

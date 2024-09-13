@@ -209,3 +209,57 @@ export function searchMemberList(params: SearchMemberListParams) {
         params: params
     })
 }
+
+interface SearchOpenGiftListParams {
+    page: number
+    pageSize: number
+    couponId: string
+    gradeId: string
+    status: string
+}
+
+export function searchOpenGiftList(params: SearchOpenGiftListParams) {
+    return request({
+        url: "/backendApi/openGift/list",
+        method: "get",
+        params: params
+    })
+}
+
+interface SaveOpenGiftParams {
+    id: string
+    couponId: string
+    couponNum: number
+    gradeId: string
+    point: number
+    status: string
+}
+
+export function saveOpenGift(params: SaveOpenGiftParams) {
+    return request({
+        url: "/backendApi/openGift/save",
+        method: "post",
+        data: params
+    })
+}
+
+interface UpdateOpenGiftStatusParams {
+    id: number
+    status: string
+}
+
+export function updateOpenGiftStatus(params: UpdateOpenGiftStatusParams) {
+    return request({
+        url: "/backendApi/openGift/updateStatus",
+        method: "post",
+        data: params
+    })
+}
+
+
+export function deleteOpenGift(id: number) {
+    return request({
+        url: "/backendApi/openGift/delete/" + id,
+        method: "get",
+    })
+}
