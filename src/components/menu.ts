@@ -154,5 +154,17 @@ export const menuData = [
                 icon: 'CircleCheck',
             }
         ],
+    },
+    {
+        name: '系统管理',
+        path: '/system',
+        icon: 'Setting',
+        children: [
+            {
+                name: '后台日志',
+                path: '/system/logs',
+                icon: 'CircleCheck',
+            },
+        ],
     }
 ]

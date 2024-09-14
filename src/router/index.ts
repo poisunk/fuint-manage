@@ -181,6 +181,17 @@ const routes = [
                         component: () => import('../views/pages/balance/record/index.vue')
                     },
                 ]
+            },
+            {
+                path: '/system',
+                name: '系统管理',
+                children: [
+                    {
+                        path: '/system/logs',
+                        name: '后台日志',
+                        component: () => import('../views/pages/system/logs/index.vue')
+                    }
+                ]
             }
         ]
     },
