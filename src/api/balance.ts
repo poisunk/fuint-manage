@@ -35,3 +35,20 @@ export function saveBalanceSetting(params: SaveBalanceSettingParams) {
         data: params
     })
 }
+
+interface BalanceListParams {
+    page: number
+    pageSize: number
+    userId: string
+    userNo: string
+    mobile: string
+    status: string
+}
+
+export function searchBalanceList(params: BalanceListParams) {
+    return resquest({
+        url: '/backendApi/balance/list',
+        method: 'get',
+        params
+    })
+}

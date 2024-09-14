@@ -147,6 +147,11 @@ export const menuData = [
                 name: '充值设置',
                 path: '/balance/setting',
                 icon: 'CircleCheck',
+            },
+            {
+                name: '余额明细',
+                path: '/balance/record',
+                icon: 'CircleCheck',
             }
         ],
     }

@@ -33,21 +33,27 @@
         <el-row>
             <el-table :data="tableListData" style="width: 100%">
                 <el-table-column prop="id" label="ID" />
-                <el-table-column prop="userInfo.id" label="会员ID" align="center" />
+                <el-table-column prop="userInfo.id" label="会员ID" />
                 <el-table-column prop="userInfo.userNo" label="会员号" align="center" />
                 <el-table-column prop="userInfo.mobile" label="手机号" align="center">
                     <template #default="scope">
                         <span>{{ scope.row.userInfo.mobile ? scope.row.userInfo.mobile : '-' }}</span>
                     </template>
                 </el-table-column>
+
                 <el-table-column prop="userInfo.name" label="会员名称" align="center" />
                 <el-table-column prop="amount" label="变动数量" align="center">
                     <template #default="scope">
-                        <span :style="{ color: scope.row.amount > 0 ? 'green' : 'red' }">{{ scope.row.amount >= 0 ? '+'
+                        <span :style="{ color: scope.row.amount > 0 ? 'green' : 'red' }">{{ scope.row.amount > 0 ? '+'
                             + scope.row.amount : scope.row.amount }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="description" label="备注" align="center" />
+
+                <el-table-column prop="description" label="备注" align="center">
+                    <template #default="scope">
+                        <span>{{ scope.row.description ? scope.row.description : '无' }}</span>
+                    </template>
+                </el-table-column>
 
                 <el-table-column prop="updateTime" label="时间" align="center" width="160">
                     <template #default="scope">
@@ -80,21 +86,20 @@ import { ElMessageBox } from 'element-plus';
 import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import { errorNotification, successNotification } from '../../../../utils/notification';
-import { deleteCouponGroup, getCouponGroupList, saveCouponGroup, updateCouponGroupStatus } from '../../../../api/coupon';
-import { getPointList } from '../../../../api/point';
+import { searchBalanceList } from '../../../../api/balance';
 
 class InlineFormData {
     userId: string
     userNo: string
     mobile: string
-    status: string = ''
+    status: string
 }
 
 const formInline = ref(new InlineFormData());
+const tableListData = ref([]);
 const currentPage = ref(1);
 const pageSize = ref(10);
 const total = ref(0);
-const tableListData = ref([]);
 
 const onSubmitQuery = () => {
     searchTableList();
@@ -112,7 +117,7 @@ const searchTableList = () => {
         ...formInline.value
     }
 
-    getPointList(params).then((res) => {
+    searchBalanceList(params).then((res) => {
         if (res.data.code != 200) {
             errorNotification(res.data.message);
             return;
@@ -128,7 +133,6 @@ const searchTableList = () => {
 const handlePaginationChange = () => {
     searchTableList();
 }
-
 
 onMounted(() => {
     searchTableList();

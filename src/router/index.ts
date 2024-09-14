@@ -175,6 +175,11 @@ const routes = [
                         name: '充值设置',
                         component: () => import('../views/pages/balance/setting/index.vue')
                     },
+                    {
+                        path: '/balance/record',
+                        name: '余额明细',
+                        component: () => import('../views/pages/balance/record/index.vue')
+                    },
                 ]
             }
         ]
