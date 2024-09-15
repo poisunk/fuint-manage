@@ -24,7 +24,7 @@ const routes = [
                 name: '内容管理',
                 children: [
                     {
-                        path: '/content/banner',
+                        path: '/content/banner/list',
                         name: '轮播管理',
                         component: () => import('../views/pages/content/banner.vue')
                     },
@@ -187,10 +187,15 @@ const routes = [
                 name: '系统管理',
                 children: [
                     {
+                        path: '/system/menu',
+                        name: '后台菜单',
+                        component: () => import('../views/pages/system/menu/index.vue')
+                    },
+                    {
                         path: '/system/logs',
                         name: '后台日志',
                         component: () => import('../views/pages/system/logs/index.vue')
-                    }
+                    },
                 ]
             }
         ]

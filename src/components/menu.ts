@@ -6,7 +6,7 @@ export const menuData = [
         children: [
             {
                 name: '轮播管理',
-                path: '/content/banner',
+                path: '/content/banner/list',
                 icon: 'CircleCheck',
             },
             {
@@ -160,6 +160,11 @@ export const menuData = [
         path: '/system',
         icon: 'Setting',
         children: [
+            {
+                name: '后台菜单',
+                path: '/system/menu',
+                icon: 'CircleCheck',
+            },
             {
                 name: '后台日志',
                 path: '/system/logs',
