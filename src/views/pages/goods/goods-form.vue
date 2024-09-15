@@ -333,6 +333,10 @@ const handleSubmit = () => {
                 } else {
                     errorNotification(res.data.message);
                 }
+
+                if (goodsId.value == 0) {
+                    goodsId.value = res.data.data.goodsInfo.id;
+                }
             });
         })
     } else if (activeName.value == 'extension') {
