@@ -174,6 +174,11 @@ export const menuData = [
                 name: '后台角色',
                 path: '/system/role',
                 icon: 'CircleCheck',
+            },
+            {
+                name: '后台管理员',
+                path: '/system/account',
+                icon: 'CircleCheck',
             }
         ],
     }

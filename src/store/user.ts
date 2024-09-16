@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { doLogin, getAccountInfo } from "../api/login";
+import { doLogin, getLoginInfo } from "../api/login";
 import { getToken, removeToken, setToken } from "../utils/storage";
 
 interface LoginData {
@@ -35,7 +35,7 @@ export const useUserStore = defineStore("user", {
 
         getInfo() {
             return new Promise((resolve, reject) => {
-                getAccountInfo().then((res) => {
+                getLoginInfo().then((res) => {
                     if (res.data.code == 200) {
                         this.userInfo = res.data.data;
                         resolve(res.data);

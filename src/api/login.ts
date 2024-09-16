@@ -22,7 +22,7 @@ export function doLogin(params: LoginParams) {
     })
 }
 
-export function getAccountInfo() {
+export function getLoginInfo() {
     return request({
         url: "/backendApi/login/getInfo",
         method: "get"

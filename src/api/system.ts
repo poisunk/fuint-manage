@@ -130,3 +130,88 @@ export function getSystemRoleInfo(roleId: string) {
         method: "get",
     });
 }
+
+interface AccountListParams {
+    page: number
+    pageSize: number
+    accountName: string
+    realName: string
+    accountStatus: string
+}
+
+export function getAccountList(params: AccountListParams) {
+    return request({
+        url: "/backendApi/account/list",
+        method: "get",
+        params
+    });
+}
+
+export function getAccountInfo(userId: string | number) {
+    return request({
+        url: "/backendApi/account/info/" + userId,
+        method: "get",
+    });
+}
+
+interface AccountParams {
+    id?: string
+    accountName: string
+    accountStatus: string
+    realName: string
+    password?: string
+    storeId: string
+    merchantId: string
+    staffId?: string
+    roleIds: string
+}
+
+export function doCreateAccount(params: AccountParams) {
+    return request({
+        url: "/backendApi/account/doCreate",
+        method: "post",
+        data: params
+    });
+}
+
+export function doUpdateAccount(params: AccountParams) {
+    return request({
+        url: "/backendApi/account/update",
+        method: "post",
+        data: params
+    });
+}
+
+export function deleteAccount(id: string) {
+    return request({
+        url: "/backendApi/account/delete/" + id,
+        method: "get",
+    });
+}
+
+interface UpdateAccountStatusParams {
+    userId: string
+    status: number
+}
+
+export function updateAccountStatus(params: UpdateAccountStatusParams) {
+    return request({
+        url: "/backendApi/account/updateStatus",
+        method: "post",
+        data: params
+    });
+}
+
+interface ResetAccountPwdParams {
+    userId: string
+    password: string
+}
+
+export function resetAccountPwd(params: ResetAccountPwdParams) {
+    return request({
+        url: "/backendApi/account/resetPwd",
+        method: "post",
+        data: params
+    });
+}
+

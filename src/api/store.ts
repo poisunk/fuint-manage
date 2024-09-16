@@ -62,3 +62,17 @@ export function saveStore(params: SaveStoreParams) {
         data: params
     })
 }
+
+interface SearchStoreListParams {
+    merchantId?: string
+    id?: string
+    name?: string
+}
+
+export function searchStoreList(params: SearchStoreListParams) {
+    return request({
+        url: "/backendApi/store/searchStore",
+        method: "get",
+        params
+    })
+}
