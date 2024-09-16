@@ -63,3 +63,70 @@ export function deleteSource(id: string) {
         method: "get",
     });
 }
+
+interface SearchRoleListParams {
+    page: number
+    pageSize: number
+    name: string
+    status: string
+}
+
+export function searchRoleList(params: SearchRoleListParams) {
+    return request({
+        url: "/backendApi/duty/list",
+        method: "get",
+        params
+    });
+}
+
+interface RoleParams {
+    id?: string
+    roleName: string
+    roleType: string
+    status: string
+    description: string
+    menuIds: any
+}
+
+export function addSystemRole(params: RoleParams) {
+    return request({
+        url: "/backendApi/duty/add",
+        method: "post",
+        data: params
+    });
+}
+
+export function updateSystemRole(params: RoleParams) {
+    return request({
+        url: "/backendApi/duty/update",
+        method: "post",
+        data: params
+    });
+}
+
+export function deleteSystemRole(id: string) {
+    return request({
+        url: "/backendApi/duty/delete/" + id,
+        method: "post",
+    });
+}
+
+interface UpdateRoleStatusParams {
+    roleId: string
+    status: string
+}
+
+export function updateRoleStatus(params: UpdateRoleStatusParams) {
+    return request({
+        url: "/backendApi/duty/updateStatus",
+        method: "post",
+        data: params
+    });
+}
+
+export function getSystemRoleInfo(roleId: string) {
+    return request({
+        url: "/backendApi/duty/info/" + roleId,
+        method: "get",
+    });
+}

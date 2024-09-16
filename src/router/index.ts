@@ -196,6 +196,11 @@ const routes = [
                         name: '后台日志',
                         component: () => import('../views/pages/system/logs/index.vue')
                     },
+                    {
+                        path: '/system/role',
+                        name: '角色管理',
+                        component: () => import('../views/pages/system/role/index.vue')
+                    }
                 ]
             }
         ]
