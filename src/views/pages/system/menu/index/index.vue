@@ -87,8 +87,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { addSource, deleteSource, getSystemSourceList, updateSource } from '../../../../api/system';
-import { errorNotification, successNotification } from '../../../../utils/notification';
+import { addSource, deleteSource, getSystemSourceList, updateSource } from '@/api/system';
+import { errorNotification, successNotification } from '@/utils/notification';
 import { Delete, Edit, Plus } from '@element-plus/icons-vue';
 import { ElMessageBox } from 'element-plus';
 

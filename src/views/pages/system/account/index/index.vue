@@ -144,9 +144,9 @@ import { onMounted } from 'vue';
 import { ElMessageBox } from 'element-plus';
 import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
-import { errorNotification, successNotification } from '../../../../utils/notification';
-import { deleteAccount, doCreateAccount, doUpdateAccount, getAccountInfo, getAccountList, resetAccountPwd, updateAccountStatus } from '../../../../api/system';
-import { searchStoreList } from '../../../../api/store';
+import { errorNotification, successNotification } from '@/utils/notification';
+import { deleteAccount, doCreateAccount, doUpdateAccount, getAccountInfo, getAccountList, resetAccountPwd, updateAccountStatus } from '@/api/system';
+import { searchStoreList } from '@/api/store';
 
 class InfoFormData {
     id: string = ''

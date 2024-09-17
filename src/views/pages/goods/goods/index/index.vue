@@ -112,13 +112,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue';
-import { getGoodsList, updateGoodsStatus } from '../../../api/goods';
+import { getGoodsList, updateGoodsStatus } from '@/api/goods';
 import { onMounted } from 'vue';
-import { errorNotification, successNotification } from '../../../utils/notification';
+import { errorNotification, successNotification } from '@/utils/notification';
 import { ElConfigProvider, ElMessageBox } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
-import { formConfigs } from './category-form-config';
-import router from '../../../router';
+import router from '@/router';
 
 const goodsListData = ref([]);
 const storeList = ref([]);
@@ -150,7 +149,7 @@ const onSubmitReset = () => {
 };
 
 const onSubmitAdd = () => {
-    router.push('/goods/add');
+    router.push('/goods/goods/add');
 };
 
 
@@ -176,7 +175,7 @@ const handleGoodsItemDelete = (row: any) => {
 }
 
 const handleGoodsItemEdit = (row: any) => {
-    router.push('/goods/edit?goodsId=' + row.id);
+    router.push('/goods/goods/edit?goodsId=' + row.id);
 }
 
 const onGoodsStatusChange = (row: any) => {
@@ -229,8 +228,6 @@ const refreshData = () => {
 
         categoryList.value = res.data.data.cateList;
         typeList.value = res.data.data.typeList;
-
-        formConfigs[1].options = storeList.value;
 
         goodsListData.value = data.paginationResponse.content;
         goodsListData.value.forEach((item: any) => {

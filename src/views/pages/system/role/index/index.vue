@@ -116,8 +116,8 @@ import { onMounted } from 'vue';
 import { ElMessageBox } from 'element-plus';
 import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
-import { errorNotification, successNotification } from '../../../../utils/notification';
-import { addSystemRole, deleteSystemRole, getSystemRoleInfo, getSystemSourceTreeList, searchRoleList, updateRoleStatus, updateSystemRole } from '../../../../api/system';
+import { errorNotification, successNotification } from '@/utils/notification';
+import { addSystemRole, deleteSystemRole, getSystemRoleInfo, getSystemSourceTreeList, searchRoleList, updateRoleStatus, updateSystemRole } from '@/api/system';
 
 class InfoFormData {
     id: string = ''

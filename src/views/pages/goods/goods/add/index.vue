@@ -240,14 +240,14 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
-import { deleteGoodsSpec, deleteGoodsSpecValue, getGoodsInfo } from '../../../api/goods';
-import { saveGoods, saveGoodsSpecName, saveGoodsSpecValue } from '../../../api/goods';
-import { errorNotification, successNotification } from '../../../utils/notification';
-import { uploadFile } from '../../../api/file';
+import { deleteGoodsSpec, deleteGoodsSpecValue, getGoodsInfo } from '@/api/goods';
+import { saveGoods, saveGoodsSpecName, saveGoodsSpecValue } from '@/api/goods';
+import { errorNotification, successNotification } from '@/utils/notification';
+import { uploadFile } from '@/api/file';
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
-import router from '../../../router';
-import { useTagsViewStore } from '../../../store/tags-view';
+import router from '@/router';
+import { useTagsViewStore } from '@/store/tags-view';
 import { useRoute } from 'vue-router';
 import { onMounted } from 'vue';
 import { Delete, Plus } from '@element-plus/icons-vue';

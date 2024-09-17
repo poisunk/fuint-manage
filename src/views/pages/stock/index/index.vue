@@ -163,11 +163,10 @@ import { ref } from 'vue';
 import { Search, Refresh, Plus, View, Delete } from '@element-plus/icons-vue';
 import { onMounted } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { errorNotification, successNotification } from '../../../utils/notification';
+import { errorNotification, successNotification } from '@/utils/notification';
 import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
-import VCustomForm from '@/components/custom-form/index.vue';
-import { deleteStock, getStockInfo, getStockList, saveStockInfo, selectGoodsList } from '../../../api/goods';
+import { deleteStock, getStockInfo, getStockList, saveStockInfo, selectGoodsList } from '@/api/goods';
 
 const formInline = ref({
     description: '',

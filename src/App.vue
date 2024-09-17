@@ -7,23 +7,18 @@ import { onBeforeMount } from 'vue';
 import router from './router';
 import { useUserStore } from './store/user';
 import { onMounted } from 'vue';
-import { errorNotification } from './utils/notification';
 
 const userStore = useUserStore();
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
     if (!userStore.init) {
         router.push('/login');
     }
 })
 
-onMounted(() => {
+onMounted(async () => {
     if (userStore.init) {
-        userStore.getInfo().catch((err: any) => {
-            userStore.init = false;
-            errorNotification(err.message);
-            router.push('/login');
-        });
+        userStore.getInfo();
     }
 })
 </script>

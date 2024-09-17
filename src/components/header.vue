@@ -11,7 +11,7 @@
                 <div class="breadcrumb-container">
                     <el-breadcrumb separator="/">
                         <el-breadcrumb-item :to="{ path: '/dashboard' }">系统首页</el-breadcrumb-item>
-                        <el-breadcrumb-item v-for="item in breadcrumbList" :key="item.path">{{ item.name
+                        <el-breadcrumb-item v-for="item in breadcrumbList" :key="item.path">{{ item.meta.title
                             }}</el-breadcrumb-item>
                     </el-breadcrumb>
                 </div>
@@ -22,9 +22,11 @@
                     <el-dropdown trigger="click">
                         <div class="user-info">
                             <span class="user-icon">
-                                <el-avatar size="medium" shadow="square">系</el-avatar>
+                                <el-avatar size="medium" shadow="square">
+                                    {{ userStore.userInfo.accountInfo.accountName[0] }}
+                                </el-avatar>
                             </span>
-                            <span class="user-name">&nbsp;系统管理员</span>
+                            <span class="user-name">&nbsp;{{ userStore.userInfo.accountInfo.accountName }}</span>
                             <el-icon class="el-icon--right">
                                 <arrow-down />
                             </el-icon>
@@ -56,7 +58,7 @@ import VTagsView from '@/components/tags-view.vue';
 
 const router = useRouter();
 const userStore = useUserStore();
-const breadcrumbList = computed(() => router.currentRoute.value.matched.filter((item: any) => item.name !== 'Dashboard'));
+const breadcrumbList = computed(() => router.currentRoute.value.matched.filter((item: any) => item.name !== 'Home'));
 
 const menuCollapse = computed(() => { return useSettingStore().menuCollapse });
 

@@ -7,7 +7,7 @@
 
             <router-link v-for="tag in visitedViews" :key="tag.path" :to="tag.fullPath" class="tags-view-item"
                 :class="isActive(tag.path)">
-                <span class="tags-title">{{ tag.name }}</span>
+                <span class="tags-title">{{ tag.meta.title }}</span>
                 <el-icon class="tags-icon" @click.prevent.stop="closeTag(tag)">
                     <Close />
                 </el-icon>

@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { computed } from 'vue';
-import { menuData } from './menu';
+import { useUserStore } from '../store/user';
 
 const router = useRouter();
 const onRouter = computed(() => {
     return router.currentRoute.value.path
+})
+
+const userStore = useUserStore();
+const menuList = computed(() => {
+    return userStore.menuList
 })
 
 </script>
@@ -29,19 +34,19 @@ const onRouter = computed(() => {
                     <span>系统首页</span>
                 </el-menu-item>
 
-                <el-sub-menu v-for="item in menuData" :key="item.name" :index="item.path">
+                <el-sub-menu v-for="item in menuList" :key="item.path" :index="item.path" :disabled="item.hidden">
                     <template #title>
                         <el-icon size="14">
-                            <component :is="item.icon"></component>
+                            <component :is="item.meta.icon"></component>
                         </el-icon>
-                        <span>{{ item.name }}</span>
+                        <span>{{ item.meta.title }}</span>
                     </template>
-                    <el-menu-item class="sub-menu-item" v-for="subItem in item.children" :key="subItem.name"
+                    <el-menu-item class="sub-menu-item" v-for="subItem in item.children" :key="subItem.meta.title"
                         :index="subItem.path">
                         <el-icon size="14">
-                            <component :is="subItem.icon"></component>
+                            <component :is="subItem.meta.icon"></component>
                         </el-icon>
-                        <span>{{ subItem.name }}</span>
+                        <span>{{ subItem.meta.title }}</span>
                     </el-menu-item>
                 </el-sub-menu>
             </el-menu>

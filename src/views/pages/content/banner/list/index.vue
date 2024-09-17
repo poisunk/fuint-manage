@@ -91,10 +91,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue';
-import { getBannerList, saveBanner, updateBanner } from '../../../api/content';
+import { getBannerList, saveBanner, updateBanner } from '@/api/content';
 import { onMounted } from 'vue';
 import { ElMessageBox } from 'element-plus';
-import { errorNotification, successNotification } from '../../../utils/notification';
+import { errorNotification, successNotification } from '@/utils/notification';
 import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import VCustomForm from '@/components/custom-form/index.vue';

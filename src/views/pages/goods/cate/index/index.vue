@@ -98,9 +98,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Search, Refresh, Plus, Edit, Delete } from '@element-plus/icons-vue';
-import { getGoodsCategoryList, saveGoodsCategory, updateGoodsCategoryStatus } from '../../../api/goods';
+import { getGoodsCategoryList, saveGoodsCategory, updateGoodsCategoryStatus } from '@/api/goods';
 import { onMounted } from 'vue';
-import { errorNotification, successNotification } from '../../../utils/notification';
+import { errorNotification, successNotification } from '@/utils/notification';
 import { ElConfigProvider, ElMessageBox } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import VCustomForm from '@/components/custom-form/index.vue';

@@ -31,12 +31,12 @@
             </el-form>
         </el-row>
         <el-row>
-            <el-table :data="tableListData" style="width: 100%">
-                <el-table-column prop="id" label="分组ID" />
-                <el-table-column prop="name" label="分组名称" />
-                <el-table-column prop="num" label="卡券数量" align="center" />
+            <el-table :data="tableListData" row-key="id" style="width: 100%">
+                <el-table-column prop="name" label="分组名称" align="center" />
+                <el-table-column prop="id" label="分组ID" align="center" />
+                <el-table-column prop="memberNum" label="会员数量" align="center" />
 
-                <el-table-column prop="createTime" label="注册时间">
+                <el-table-column prop="createTime" label="创建时间">
                     <template #default="scope">
                         <span>{{ new Date(scope.row.createTime).toLocaleString() }}</span>
                     </template>
@@ -53,10 +53,12 @@
                             @change="handleItemStatusChange(scope.row, scope.row.status)" />
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" fixed="right" align="center">
+                <el-table-column label="操作" fixed="right" align="center" width="220">
                     <template #default="scope">
                         <el-button link type="primary" size="small" :icon="Edit"
                             @click="handleItemEdit(scope.row)">编辑</el-button>
+                        <el-button link type="primary" size="small" :icon="Plus"
+                            @click="handleItemAddChildren(scope.row)">添加子级</el-button>
                         <el-button link type="primary" size="small" :icon="Delete"
                             @click="handleItemDelete(scope.row)">删除
                         </el-button>
@@ -91,9 +93,9 @@ import { ElMessageBox } from 'element-plus';
 import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import VCustomForm from '@/components/custom-form/index.vue';
-import { errorNotification, successNotification } from '../../../../utils/notification';
-import { deleteCouponGroup, getCouponGroupList, saveCouponGroup, updateCouponGroupStatus } from '../../../../api/coupon';
+import { errorNotification, successNotification } from '@/utils/notification';
 import { formConfigs } from './form-config';
+import { deleteMemberGroup, searchMemberGroupList, saveMemberGroup, updateMemberGroupStatus } from '@/api/member';
 
 class InfoFormData {
     id: string = ''
@@ -128,18 +130,36 @@ const onSubmitReset = () => {
 }
 
 const onInfoFormClosed = () => {
+    if (dialogTitle.value == '添加子级会员分组') {
+        formConfigs.shift();
+    }
     infoFormData.value = new InfoFormData();
     dialogInfoFormVisible.value = false;
 }
 
 const onOpenPlusForm = () => {
-    dialogTitle.value = '新增会员';
+    dialogTitle.value = '新增会员分组';
     dialogInfoFormVisible.value = true;
 }
 
 const handleItemEdit = (row: any) => {
     infoFormData.value = row;
-    dialogTitle.value = '编辑会员';
+    dialogTitle.value = '编辑会员分组';
+    dialogInfoFormVisible.value = true;
+}
+
+const handleItemAddChildren = (row: any) => {
+    infoFormData.value = JSON.parse(JSON.stringify(row));
+    infoFormData.value.parentName = row.name;
+    infoFormData.value.name = '';
+    dialogTitle.value = '添加子级会员分组';
+    formConfigs.unshift({
+        type: 'input',
+        label: '上级分组',
+        field: 'parentName',
+        placeholder: '请输入子级分组名称',
+        isDisabled: true,
+    });
     dialogInfoFormVisible.value = true;
 }
 
@@ -149,7 +169,7 @@ const handleItemDelete = (row: any) => {
         cancelButtonText: '取消',
         type: 'warning',
     }).then(() => {
-        deleteCouponGroup(row.id).then((res) => {
+        deleteMemberGroup(row.id).then((res) => {
             if (res.data.code != 200) {
                 errorNotification(res.data.message);
                 return;
@@ -176,7 +196,7 @@ const handleItemStatusChange = (row: any, status: string = '') => {
             status: status
         }
 
-        updateCouponGroupStatus(params).then((res) => {
+        updateMemberGroupStatus(params).then((res) => {
             if (res.data.code != 200) {
                 errorNotification(res.data.message);
                 if (status == 'D') {
@@ -199,11 +219,16 @@ const handleItemStatusChange = (row: any, status: string = '') => {
 
 const onInfoFormConfirm = () => {
     infoFormRef.value.formRef.validate().then(() => {
-        const params = {
+        let params = {
             ...infoFormData.value
         }
 
-        saveCouponGroup(params).then((res) => {
+        if (dialogTitle.value == '添加子级会员分组') {
+            params.id = '';
+            params = Object.assign(params, { parentId: infoFormData.value.id });
+        }
+
+        saveMemberGroup(params).then((res) => {
             if (res.data.code != 200) {
                 errorNotification(res.data.message);
                 return;
@@ -225,7 +250,7 @@ const searchTableList = () => {
         ...formInline.value
     }
 
-    getCouponGroupList(params).then((res) => {
+    searchMemberGroupList(params).then((res) => {
         if (res.data.code != 200) {
             errorNotification(res.data.message);
             return;

@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { getCode } from "../../api/login.ts";
 import { UserFilled, Lock } from "@element-plus/icons-vue";
 import { useUserStore } from '../../store/user.ts';
-import router from '../../router/index.ts';
+import router, { initRouters } from '../../router/index.ts';
 import { errorNotification, successNotification } from '../../utils/notification.ts';
 
 const userStore = useUserStore();
@@ -16,7 +16,7 @@ const loginParams = ref({
     password: "",
     username: "",
     uuid: "",
-})
+});
 
 const rules = {
     username: [
@@ -50,7 +50,10 @@ const login = () => {
         userStore.login(loginParams.value).then((res: any) => {
             if (res.code == 200) {
                 successNotification(res.message);
-                router.push("/dashboard");
+                userStore.getInfo().then(async () => {
+                    await initRouters();
+                    router.push('/dashboard');
+                })
             }
         }).catch((err: any) => {
             errorNotification(err.message);
