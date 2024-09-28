@@ -2,6 +2,8 @@
 import { useRouter } from 'vue-router';
 import { computed } from 'vue';
 import { useUserStore } from '../store/user';
+import { useSettingStore } from '../store/setting';
+import { el } from 'element-plus/es/locale';
 
 const router = useRouter();
 const onRouter = computed(() => {
@@ -13,20 +15,26 @@ const menuList = computed(() => {
     return userStore.menuList
 })
 
+const settingStore = useSettingStore();
+const menuCollapse = computed(() => { return settingStore.menuCollapse });
+
 </script>
 
 <template>
     <div class="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-title">会员营销管理系统</div>
-            <div class="info-card">
+            <div v-if="!menuCollapse" class="sidebar-title fade-show">会员营销管理系统</div>
+            <el-icon v-else class="fade-show" color="#00acac" size="50" style="margin-top: 20px">
+                <ChromeFilled />
+            </el-icon>
+            <div v-if="!menuCollapse" class="info-card">
                 <div id="username">系统管理员</div>
                 <div id="user-role">(管理员角色)</div>
             </div>
         </div>
-        <el-scrollbar>
+        <el-scrollbar class="menu-scrollbar">
             <el-menu :default-active="onRouter" mode="vertical" background-color="#304156" text-color="#fff"
-                active-text-color="#09989b" unique-opened router>
+                active-text-color="#09989b" unique-opened router :collapse="menuCollapse" :collapse-transition="false">
                 <el-menu-item index="/dashboard">
                     <el-icon>
                         <Menu />
@@ -65,10 +73,35 @@ const menuList = computed(() => {
 
     .sidebar-header {
         height: 100px;
+        align-items: center;
+        text-align: center;
     }
 
     .el-scrollbar {
         height: calc(100vh - 100px);
+    }
+}
+
+.menu-scrollbar {
+    background: #304156;
+    border-right: none;
+
+    .el-menu {
+        border-right: none;
+    }
+}
+
+.fade-show {
+    animation: fadeIn 0.5s;
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
     }
 }
 
@@ -79,6 +112,7 @@ const menuList = computed(() => {
     font-weight: bold;
     font-size: 18px;
     color: white;
+    text-wrap: nowrap;
 }
 
 .info-card {

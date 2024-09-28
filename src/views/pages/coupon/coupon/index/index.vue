@@ -353,7 +353,7 @@ import { uploadFile } from '../../../../../api/file';
 import { formatDate } from '../../../../../utils/date-utils';
 import { getMemberGroupList, getTotalMember, searchMemberList } from '../../../../../api/member';
 import { Tree } from 'element-plus/es/components/tree-v2/src/types';
-import { debounce } from '../../../../../store/instruction';
+import { debounce } from '../../../../../utils/instruction';
 import { createQrcode } from '../../../../../api/common';
 
 class InfoFormData {
